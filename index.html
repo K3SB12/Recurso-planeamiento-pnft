@@ -2692,11 +2692,27 @@
         let saberesProcedimentalesGlobales = new Set();
         let saberesActitudinalesGlobales = new Set();
         let formatoExportacion = 'pdf'; // ← Cambiado a PDF por defecto
+        // ========== VARIABLES PARA PROYECCIÓN GENERAL ==========
+        let areasProyeccionSeleccionadas = new Set();
+        let saberesConceptualesProyeccion = new Set();
+        let procedimentalesProyeccion = new Set();
+        let actitudinalesProyeccion = new Set();
+        // =======================================================
 
         // Inicialización
         document.addEventListener('DOMContentLoaded', function() {
             inicializarSemanas();
             configurarEventListeners();
+            
+            // ========== SINCRONIZAR LECCIONES DE PROYECCIÓN ==========
+            document.getElementById('leccionesPlanificadas').addEventListener('change', function() {
+                document.getElementById('proyeccion-lecciones-totales').value = this.value;
+            });
+            
+            // Sincronizar al cargar
+            document.getElementById('proyeccion-lecciones-totales').value = 
+                document.getElementById('leccionesPlanificadas').value;
+            // =========================================================
         });
 
         function configurarEventListeners() {
@@ -5907,7 +5923,7 @@
             document.getElementById('promptSemanaModal').style.display = 'block';
         }
 
-        // ======================= FUNCIONES PARA PROYECCIÓN GENERAL MEJORADA =======================
+           // ======================= FUNCIONES PARA PROYECCIÓN GENERAL MEJORADA =======================
 
         // Variables globales para proyección
         let areasProyeccionSeleccionadas = new Set();
@@ -5915,7 +5931,7 @@
         let procedimentalesProyeccion = new Set();
         let actitudinalesProyeccion = new Set();
         
-        // 1. ACTUALIZAR ÁREAS SELECCIONADAS (MEJORADA CON FEEDBACK VISUAL)
+        // 1. ACTUALIZAR ÁREAS SELECCIONADAS
         function actualizarAreasProyeccion() {
             const checkboxes = document.querySelectorAll('input[name="area-proyeccion"]:checked');
             areasProyeccionSeleccionadas.clear();
@@ -5923,7 +5939,7 @@
             checkboxes.forEach(cb => {
                 areasProyeccionSeleccionadas.add(cb.value);
                 
-                // FEEDBACK VISUAL: Marcar área seleccionada
+                // FEEDBACK VISUAL
                 const areaItem = cb.closest('.area-item');
                 if (areaItem) {
                     if (cb.checked) {
@@ -5948,10 +5964,10 @@
             actualizarIndicadoresProyeccion();
         }
         
-        // 2. ACTUALIZAR RDA SEGÚN ÁREAS (CORREGIDA PARA NUEVA ESTRUCTURA)
+        // 2. ACTUALIZAR RDA SEGÚN ÁREAS
         function actualizarRDAProyeccion() {
             const ciclo = document.getElementById('ciclo').value;
-            const rdaContainer = document.getElementById('rda-proyeccion-detallado'); // ID CORREGIDO
+            const rdaContainer = document.getElementById('rda-proyeccion-detallado');
             
             if (!ciclo || areasProyeccionSeleccionadas.size === 0) {
                 rdaContainer.innerHTML = `
@@ -6190,6 +6206,9 @@
                     Seleccione saberes conceptuales para ver los indicadores de logro
                 </div>
             `;
+            
+            // ACTUALIZAR ASIGNACIÓN DE EVALUACIÓN
+            actualizarAsignacionEvaluacion();
         }
         
         // 6. ACTUALIZAR PROCEDIMENTALES
@@ -6225,6 +6244,7 @@
                     saberesConceptuales: Array.from(saberesConceptualesProyeccion),
                     saberesProcedimentales: Array.from(procedimentalesProyeccion),
                     saberesActitudinales: Array.from(actitudinalesProyeccion),
+                    evaluacion: obtenerDatosEvaluacion(),
                     totalSaberes: saberesConceptualesProyeccion.size,
                     totalProcedimentales: procedimentalesProyeccion.size,
                     totalActitudinales: actitudinalesProyeccion.size
@@ -6274,6 +6294,19 @@
                 } else {
                     prompt += `   (No seleccionados)\n`;
                 }
+                
+                prompt += `\n📊 DISTRIBUCIÓN DE EVALUACIÓN:\n`;
+                if (datos.evaluacion.length > 0) {
+                    let totalPorcentaje = 0;
+                    datos.evaluacion.forEach(evalItem => {
+                        prompt += `   - ${evalItem.saber}: ${evalItem.tipoEvaluacion} (${evalItem.porcentaje}%)\n`;
+                        totalPorcentaje += evalItem.porcentaje;
+                    });
+                    prompt += `   • Total asignado: ${totalPorcentaje}%\n`;
+                } else {
+                    prompt += `   (No se ha asignado evaluación)\n`;
+                }
+                
                 prompt += `\n🤖 SOLICITO UNA PROPUESTA DE PROYECCIÓN QUE:\n`;
                 prompt += `1. Distribuya los ${datos.totalSaberes} saberes conceptuales en ${datos.lecciones} lecciones\n`;
                 prompt += `2. Integre los ${datos.totalProcedimentales} saberes procedimentales en actividades prácticas\n`;
@@ -6292,78 +6325,208 @@
             }
         }
         
-        // ======================= INICIALIZACIÓN Y GUARDADO =======================
+        // ======================= FUNCIONES PARA ASIGNACIÓN DE EVALUACIÓN =======================
         
-        // INICIALIZAR AL CARGAR LA PÁGINA
-        document.addEventListener('DOMContentLoaded', function() {
-            setTimeout(() => {
-                const checkboxes = document.querySelectorAll('input[name="area-proyeccion"]');
-                checkboxes.forEach(cb => {
-                    if (areasProyeccionSeleccionadas.has(cb.value)) {
-                        cb.checked = true;
-                        const areaItem = cb.closest('.area-item');
-                        if (areaItem) {
-                            areaItem.style.borderLeft = '3px solid #45258F';
-                            areaItem.style.background = '#f0ebf9';
-                            areaItem.style.fontWeight = '600';
-                        }
-                    }
-                });
-                actualizarRDAProyeccion();
-                actualizarSaberesConceptualesProyeccion();
-                actualizarIndicadoresProyeccion();
-            }, 1000);
-        });
-        
-        // MODIFICAR FUNCIÓN obtenerDatosPlan() - Agrega al final:
-        function obtenerDatosPlan() {
-            return {
-                // ... tus datos existentes ...
-                
-                // NUEVO: DATOS DE PROYECCIÓN GENERAL
-                proyeccionGeneral: {
-                    areasSeleccionadas: Array.from(areasProyeccionSeleccionadas),
-                    saberesConceptuales: Array.from(saberesConceptualesProyeccion),
-                    saberesProcedimentales: Array.from(procedimentalesProyeccion),
-                    saberesActitudinales: Array.from(actitudinalesProyeccion),
-                    fechaProyeccion: new Date().toISOString()
-                }
-            };
+        // 9. ACTUALIZAR LISTA DE ASIGNACIÓN DE EVALUACIÓN
+        function actualizarAsignacionEvaluacion() {
+            const container = document.getElementById('lista-asignacion-evaluacion');
+            
+            if (saberesConceptualesProyeccion.size === 0) {
+                container.innerHTML = `
+                    <div style="color: #666; font-style: italic; font-size: 11px; padding: 10px; text-align: center;">
+                        Seleccione saberes conceptuales arriba para asignar evaluación
+                    </div>
+                `;
+                document.getElementById('total-porcentaje-asignado').textContent = '0%';
+                return;
+            }
+            
+            let html = '<div style="max-height: 250px; overflow-y: auto; padding-right: 5px;">';
+            let contador = 1;
+            
+            saberesConceptualesProyeccion.forEach(saber => {
+                html += `
+                    <div style="margin-bottom: 10px; padding: 8px; background: #f8f9fa; border-radius: 6px; border-left: 3px solid #6c47c9;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                            <div style="font-size: 11px; font-weight: 600; color: #45258F;">
+                                ${contador}. ${saber}
+                            </div>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                            <div>
+                                <label style="font-size: 10px; color: #666; display: block; margin-bottom: 3px;">
+                                    Tipo de evaluación:
+                                </label>
+                                <select class="select-field" 
+                                        style="width: 100%; font-size: 10px; padding: 4px 6px;"
+                                        onchange="actualizarTotalPorcentaje()"
+                                        data-saber="${saber}">
+                                    <option value="">Seleccionar...</option>
+                                    <option value="trabajo-cotidiano-1">Trabajo Cotidiano #1 (5%)</option>
+                                    <option value="trabajo-cotidiano-2">Trabajo Cotidiano #2 (5%)</option>
+                                    <option value="trabajo-cotidiano-3">Trabajo Cotidiano #3 (5%)</option>
+                                    <option value="trabajo-cotidiano-4">Trabajo Cotidiano #4 (5%)</option>
+                                    <option value="tarea-1">Tarea #1 (10%)</option>
+                                    <option value="tarea-2">Tarea #2 (10%)</option>
+                                    <option value="prueba-corta">Prueba Corta (15%)</option>
+                                    <option value="prueba-parcial">Prueba Parcial (25%)</option>
+                                    <option value="proyecto">Proyecto (20%)</option>
+                                    <option value="observacion">Observación (5%)</option>
+                                    <option value="otro">Otro (personalizado)</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label style="font-size: 10px; color: #666; display: block; margin-bottom: 3px;">
+                                    % Personalizado:
+                                </label>
+                                <input type="number" 
+                                       class="input-field" 
+                                       style="width: 100%; font-size: 10px; padding: 4px 6px;"
+                                       min="0" 
+                                       max="100" 
+                                       placeholder="Ej: 10"
+                                       onchange="actualizarTotalPorcentaje()"
+                                       data-saber="${saber}">
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 6px;">
+                            <label style="font-size: 10px; color: #666; display: block; margin-bottom: 3px;">
+                                Observaciones:
+                            </label>
+                            <input type="text" 
+                                   class="input-field" 
+                                   style="width: 100%; font-size: 10px; padding: 4px 6px;"
+                                   placeholder="Ej: Evaluar en clase práctica"
+                                   data-saber="${saber}">
+                        </div>
+                    </div>
+                `;
+                contador++;
+            });
+            
+            html += '</div>';
+            container.innerHTML = html;
+            
+            actualizarTotalPorcentaje();
         }
         
-        // MODIFICAR FUNCIÓN cargarPlan() - Agrega esto:
-        function cargarPlan(plan) {
-            // ... tu código existente ...
+        // 10. CALCULAR TOTAL DE PORCENTAJE ASIGNADO
+        function actualizarTotalPorcentaje() {
+            const porcentajes = {
+                'trabajo-cotidiano-1': 5,
+                'trabajo-cotidiano-2': 5,
+                'trabajo-cotidiano-3': 5,
+                'trabajo-cotidiano-4': 5,
+                'tarea-1': 10,
+                'tarea-2': 10,
+                'prueba-corta': 15,
+                'prueba-parcial': 25,
+                'proyecto': 20,
+                'observacion': 5,
+                'otro': 0
+            };
             
-            // NUEVO: CARGAR DATOS DE PROYECCIÓN
-            if (plan.proyeccionGeneral) {
-                areasProyeccionSeleccionadas = new Set(plan.proyeccionGeneral.areasSeleccionadas || []);
-                saberesConceptualesProyeccion = new Set(plan.proyeccionGeneral.saberesConceptuales || []);
-                procedimentalesProyeccion = new Set(plan.proyeccionGeneral.saberesProcedimentales || []);
-                actitudinalesProyeccion = new Set(plan.proyeccionGeneral.saberesActitudinales || []);
+            let total = 0;
+            const selects = document.querySelectorAll('#lista-asignacion-evaluacion select');
+            
+            selects.forEach(select => {
+                const saber = select.getAttribute('data-saber');
+                const tipo = select.value;
+                const inputPorcentaje = document.querySelector(`input[data-saber="${saber}"][type="number"]`);
                 
-                setTimeout(() => {
-                    const checkboxes = document.querySelectorAll('input[name="area-proyeccion"]');
-                    checkboxes.forEach(cb => {
-                        if (areasProyeccionSeleccionadas.has(cb.value)) {
-                            cb.checked = true;
-                            const areaItem = cb.closest('.area-item');
-                            if (areaItem) {
-                                areaItem.style.borderLeft = '3px solid #45258F';
-                                areaItem.style.background = '#f0ebf9';
-                                areaItem.style.fontWeight = '600';
-                            }
-                        }
-                    });
-                    actualizarRDAProyeccion();
-                    actualizarSaberesConceptualesProyeccion();
-                    actualizarIndicadoresProyeccion();
-                }, 800);
+                if (tipo === 'otro' && inputPorcentaje && inputPorcentaje.value) {
+                    total += parseInt(inputPorcentaje.value) || 0;
+                } else if (tipo && tipo !== 'otro') {
+                    total += porcentajes[tipo] || 0;
+                }
+            });
+            
+            document.getElementById('total-porcentaje-asignado').textContent = `${total}%`;
+            
+            const totalElement = document.getElementById('total-porcentaje-asignado');
+            if (total > 100) {
+                totalElement.style.color = '#dc3545';
+            } else if (total === 100) {
+                totalElement.style.color = '#28a745';
+            } else if (total > 0) {
+                totalElement.style.color = '#ffc107';
+            } else {
+                totalElement.style.color = '#666';
             }
         }
+        
+        // 11. OBTENER DATOS DE EVALUACIÓN
+        function obtenerDatosEvaluacion() {
+            const datos = [];
+            const selects = document.querySelectorAll('#lista-asignacion-evaluacion select');
+            
+            selects.forEach(select => {
+                const saber = select.getAttribute('data-saber');
+                const tipo = select.value;
+                const inputPorcentaje = document.querySelector(`input[data-saber="${saber}"][type="number"]`);
+                const inputObservacion = document.querySelector(`input[data-saber="${saber}"]:not([type="number"])`);
+                
+                let porcentaje = 0;
+                let tipoTexto = '';
+                
+                const tiposMap = {
+                    'trabajo-cotidiano-1': 'Trabajo Cotidiano #1',
+                    'trabajo-cotidiano-2': 'Trabajo Cotidiano #2',
+                    'trabajo-cotidiano-3': 'Trabajo Cotidiano #3',
+                    'trabajo-cotidiano-4': 'Trabajo Cotidiano #4',
+                    'tarea-1': 'Tarea #1',
+                    'tarea-2': 'Tarea #2',
+                    'prueba-corta': 'Prueba Corta',
+                    'prueba-parcial': 'Prueba Parcial',
+                    'proyecto': 'Proyecto',
+                    'observacion': 'Observación',
+                    'otro': 'Otro'
+                };
+                
+                if (tipo === 'otro') {
+                    tipoTexto = inputObservacion ? inputObservacion.value : 'Personalizado';
+                    porcentaje = parseInt(inputPorcentaje.value) || 0;
+                } else if (tipo) {
+                    tipoTexto = tiposMap[tipo] || tipo;
+                    porcentaje = inputPorcentaje.value ? parseInt(inputPorcentaje.value) : 
+                                {'trabajo-cotidiano-1':5,'trabajo-cotidiano-2':5,'trabajo-cotidiano-3':5,'trabajo-cotidiano-4':5,
+                                 'tarea-1':10,'tarea-2':10,'prueba-corta':15,'prueba-parcial':25,'proyecto':20,'observacion':5}[tipo] || 0;
+                }
+                
+                if (tipo && porcentaje > 0) {
+                    datos.push({
+                        saber: saber,
+                        tipoEvaluacion: tipoTexto,
+                        porcentaje: porcentaje,
+                        observaciones: inputObservacion ? inputObservacion.value : ''
+                    });
+                }
+            });
+            
+            return datos;
+        }
+        
+        // ======================= INICIALIZACIÓN =======================
+        
+        // AL CARGAR LA PÁGINA, SINCRONIZAR LECCIONES
+        document.addEventListener('DOMContentLoaded', function() {
+            // Sincronizar lecciones de proyección
+            document.getElementById('proyeccion-lecciones-totales').value = 
+                document.getElementById('leccionesPlanificadas').value;
+            
+            // Event listener para cambios
+            document.getElementById('leccionesPlanificadas').addEventListener('change', function() {
+                document.getElementById('proyeccion-lecciones-totales').value = this.value;
+            });
+        }); 
+     
     </script>
 </body>
 </html>
+
 
 
 
