@@ -4117,141 +4117,78 @@
         }
 
         function cargarPlan(plan) {
-            if (plan.informacionGeneral) {
-                document.getElementById('cursoLectivo').value = plan.informacionGeneral.cursoLectivo || '2026';
-                document.getElementById('semestre').value = plan.informacionGeneral.semestre || 'I';
-                document.getElementById('direccionRegional').value = plan.informacionGeneral.direccionRegional || '';
-                document.getElementById('centroEducativo').value = plan.informacionGeneral.centroEducativo || '';
-                document.getElementById('codigoCentro').value = plan.informacionGeneral.codigoCentro || '';
-                document.getElementById('nombreDocente').value = plan.informacionGeneral.nombreDocente || '';
-                document.getElementById('circuito').value = plan.informacionGeneral.circuito || '';
-                document.getElementById('ciclo').value = plan.informacionGeneral.ciclo || '';
-                
-                actualizarNiveles();
-                
-                document.getElementById('nivel').value = plan.informacionGeneral.nivel || '';
-                document.getElementById('leccionesPlanificadas').value = plan.informacionGeneral.leccionesPlanificadas || '8';
-                document.getElementById('mesInicio').value = plan.informacionGeneral.mesInicio || '';
-                document.getElementById('mesFinal').value = plan.informacionGeneral.mesFinal || '';
-                document.getElementById('asignatura').value = plan.informacionGeneral.asignatura || 'Formación tecnológica/Informática Educativa';
-            }
-            
-            if (plan.ejesTransversales) {
-                document.querySelectorAll('input[name="eje"]').forEach(checkbox => {
-                    checkbox.checked = plan.ejesTransversales.includes(checkbox.value);
-                });
-            }
-            
-            if (plan.metodologiaActiva) {
-                // Manejar metodología personalizada
-                const metodologia = plan.metodologiaActiva;
-                if (metodologia.includes('ABJ') || metodologia.includes('Aprendizaje basado en juegos')) {
-                    document.getElementById('metodologiaActiva').value = 'ABJ';
-                } else if (metodologia.includes('ABR') || metodologia.includes('Aprendizaje basado en retos')) {
-                    document.getElementById('metodologiaActiva').value = 'ABR';
-                } else if (metodologia.includes('APD') || metodologia.includes('Pensamiento por Diseño')) {
-                    document.getElementById('metodologiaActiva').value = 'APD';
-                } else if (metodologia) {
-                    document.getElementById('metodologiaActiva').value = 'otra';
-                    document.getElementById('metodologiaPersonalizada').value = metodologia;
-                    document.getElementById('metodologiaPersonalizadaContainer').classList.add('visible');
-                }
-            }
-
-           // ===== CARGAR DATOS DE PROYECCIÓN GENERAL =====
-            if (plan.proyeccionGeneral) {
-                // Cargar metodología de proyección
-                if (plan.proyeccionGeneral.metodologiaProyeccion) {
-                    document.getElementById('metodologia-proyeccion').value = plan.proyeccionGeneral.metodologiaProyeccion;
-                }
-                
-                // Cargar áreas de proyección
-                if (plan.proyeccionGeneral.areasProyeccion && plan.proyeccionGeneral.areasProyeccion.length > 0) {
-                    const areaMappingInverso = {
-                        'Apropiación tecnológica y Digital': 'apropiacion',
-                        'Programación y Algoritmos': 'programacion',
-                        'Computación física y Robótica': 'robotica',
-                        'Ciencia de datos e Inteligencia artificial': 'ciencia'
-                    };
-                    
-                    plan.proyeccionGeneral.areasProyeccion.forEach(areaNombre => {
-                        const areaKey = areaMappingInverso[areaNombre];
-                        if (areaKey) {
-                            const checkbox = document.getElementById(`area-proyeccion-${areaKey}`);
-                            if (checkbox) {
-                                checkbox.checked = true;
-                            }
-                        }
-                    });
-                    
-                    // Actualizar la vista de proyección
-                    setTimeout(() => {
-                        actualizarAreasProyeccion();
-                    }, 100);
-                }
-                
-                // Cargar saberes seleccionados en proyección
-                if (plan.proyeccionGeneral.saberesProyeccionSeleccionados) {
-                    saberesProyeccionSeleccionados = new Set(plan.proyeccionGeneral.saberesProyeccionSeleccionados);
-                }
-                
-                // Cargar evaluación de proyección
-                if (plan.proyeccionGeneral.evaluacionProyeccion) {
-                    const evaluacionContainer = document.querySelector('#modulo-proyeccion-general .contenedor-editable[data-placeholder*="Ejemplo"]');
-                    if (evaluacionContainer) {
-                        evaluacionContainer.innerHTML = plan.proyeccionGeneral.evaluacionProyeccion;
-                    }
-                } else if (plan.proyeccionGeneral.textoEvaluacionProyeccion) {
-                    // Si solo tenemos el texto plano
-                    const evaluacionContainer = document.querySelector('#modulo-proyeccion-general .contenedor-editable[data-placeholder*="Ejemplo"]');
-                    if (evaluacionContainer) {
-                        evaluacionContainer.textContent = plan.proyeccionGeneral.textoEvaluacionProyeccion;
-                    }
-                }
-            }
-            
-            if (plan.semanas && plan.semanas.length > 0) {
-                semanas = plan.semanas;
-                reconstruirVistaSemanasPreservandoContenido();
-            }
-            
-            if (plan.saberesGlobales) {
-                saberesSeleccionados = new Set(plan.saberesGlobales);
-            }
-            
-            if (plan.saberesProcedimentalesGlobales) {
-                saberesProcedimentalesGlobales = new Set(plan.saberesProcedimentalesGlobales);
-            }
-            
-            if (plan.saberesActitudinalesGlobales) {
-                saberesActitudinalesGlobales = new Set(plan.saberesActitudinalesGlobales);
-            }
-            
-            if (plan.reflexiones) {
-                document.getElementById('queFunciono').value = plan.reflexiones.queFunciono || '';
-                document.getElementById('queNoFunciono').value = plan.reflexiones.queNoFunciono || '';
-                document.getElementById('queMejorar').value = plan.reflexiones.queMejorar || '';
-            }
-            
-            if (plan.observaciones) {
-                document.getElementById('observaciones').value = plan.observaciones || '';
-            }
+           if (plan.informacionGeneral) {
+               document.getElementById('cursoLectivo').value = plan.informacionGeneral.cursoLectivo || '2026';
+               document.getElementById('semestre').value = plan.informacionGeneral.semestre || 'I';
+               document.getElementById('direccionRegional').value = plan.informacionGeneral.direccionRegional || '';
+               document.getElementById('centroEducativo').value = plan.informacionGeneral.centroEducativo || '';
+               document.getElementById('codigoCentro').value = plan.informacionGeneral.codigoCentro || '';
+               document.getElementById('nombreDocente').value = plan.informacionGeneral.nombreDocente || '';
+               document.getElementById('circuito').value = plan.informacionGeneral.circuito || '';
+               document.getElementById('ciclo').value = plan.informacionGeneral.ciclo || '';
+               
+               actualizarNiveles();
+               
+               document.getElementById('nivel').value = plan.informacionGeneral.nivel || '';
+               document.getElementById('leccionesPlanificadas').value = plan.informacionGeneral.leccionesPlanificadas || '8';
+               document.getElementById('mesInicio').value = plan.informacionGeneral.mesInicio || '';
+               document.getElementById('mesFinal').value = plan.informacionGeneral.mesFinal || '';
+               document.getElementById('asignatura').value = plan.informacionGeneral.asignatura || 'Formación tecnológica/Informática Educativa';
+           }
+           
+           if (plan.ejesTransversales) {
+               document.querySelectorAll('input[name="eje"]').forEach(checkbox => {
+                   checkbox.checked = plan.ejesTransversales.includes(checkbox.value);
+               });
+           }
+           
+           if (plan.metodologiaActiva) {
+               const metodologia = plan.metodologiaActiva;
+               if (metodologia.includes('ABJ') || metodologia.includes('Aprendizaje basado en juegos')) {
+                   document.getElementById('metodologiaActiva').value = 'ABJ';
+               } else if (metodologia.includes('ABR') || metodologia.includes('Aprendizaje basado en retos')) {
+                   document.getElementById('metodologiaActiva').value = 'ABR';
+               } else if (metodologia.includes('APD') || metodologia.includes('Pensamiento por Diseño')) {
+                   document.getElementById('metodologiaActiva').value = 'APD';
+               } else if (metodologia) {
+                   document.getElementById('metodologiaActiva').value = 'otra';
+                   document.getElementById('metodologiaPersonalizada').value = metodologia;
+                   document.getElementById('metodologiaPersonalizadaContainer').classList.add('visible');
+               }
+           }
+           
+           if (plan.semanas && plan.semanas.length > 0) {
+               semanas = plan.semanas;
+               reconstruirVistaSemanasPreservandoContenido();
+           }
+           
+           if (plan.saberesGlobales) {
+               saberesSeleccionados = new Set(plan.saberesGlobales);
+           }
+           
+           if (plan.saberesProcedimentalesGlobales) {
+               saberesProcedimentalesGlobales = new Set(plan.saberesProcedimentalesGlobales);
+           }
+           
+           if (plan.saberesActitudinalesGlobales) {
+               saberesActitudinalesGlobales = new Set(plan.saberesActitudinalesGlobales);
+           }
+           
+           if (plan.reflexiones) {
+               document.getElementById('queFunciono').value = plan.reflexiones.queFunciono || '';
+               document.getElementById('queNoFunciono').value = plan.reflexiones.queNoFunciono || '';
+               document.getElementById('queMejorar').value = plan.reflexiones.queMejorar || '';
+           }
+           
+           if (plan.observaciones) {
+               document.getElementById('observaciones').value = plan.observaciones || '';
+           }
             
             actualizarContadoresSemanas();
 
            // FORZAR ACTUALIZACIÓN DE SABERES CONCEPTUALES
            setTimeout(() => {
-               // Actualizar proyección
-                  /* COMENTA TEMPORALMENTE ESTO:
-                     if (plan.proyeccionGeneral) {
-                         actualizarAreasProyeccion();
-                         actualizarSaberesConceptualesProyeccion();
-                         actualizarIndicadoresProyeccion(); 
-                     }, 500); // Un poco más de tiempo para asegurar renderizado
-          }
-           */
-                   
-                   // Actualizar semanas
+                  // Actualizar semanas
                    semanas.forEach((semana, index) => {
                        actualizarRdASemana(index + 1);
                        actualizarOpcionesSaberesSemana(index + 1);
@@ -4260,7 +4197,7 @@
                    });
                }, 500);
             
-            alert('Plan cargado exitosamente (incluyendo proyección general)');
+            alert('Plan cargado exitosamente');
         }
 
         // ===== FUNCIONES DE EXPORTACIÓN CORREGIDAS =====
@@ -6397,6 +6334,7 @@
     </script>
 </body>
 </html>
+
 
 
 
