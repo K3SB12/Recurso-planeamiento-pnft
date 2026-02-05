@@ -3992,6 +3992,30 @@
             if (metodologia === 'otra') {
                 metodologia = document.getElementById('metodologiaPersonalizada').value || 'Otra metodología (personalizada)';
             }
+
+            // Datos del módulo de proyección
+            const metodologiaProyeccion = document.getElementById('metodologia-proyeccion').value;
+            
+            // Obtener áreas seleccionadas en proyección
+            const areasProyeccionGuardar = [];
+            document.querySelectorAll('input[name="area-proyeccion"]:checked').forEach(checkbox => {
+                const areaMapping = {
+                    'apropiacion': 'Apropiación tecnológica y Digital',
+                    'programacion': 'Programación y Algoritmos',
+                    'robotica': 'Computación física y Robótica',
+                    'ciencia': 'Ciencia de datos e Inteligencia artificial'
+                };
+                areasProyeccionGuardar.push(areaMapping[checkbox.value]);
+            });
+
+       // 3. Texto de evaluación (solo texto plano)
+        let textoEvaluacionProyeccion = '';
+        const elementoEvaluacion = document.querySelector('#modulo-proyeccion-general .contenedor-editable[data-placeholder*="Ejemplo"]');
+        if (elementoEvaluacion) {
+            textoEvaluacionProyeccion = elementoEvaluacion.textContent || '';
+        }
+        
+        // ========== FIN DATOS PROYECCIÓN ==========
             
             return {
                 informacionGeneral: {
@@ -4011,6 +4035,13 @@
                 },
                 ejesTransversales: Array.from(document.querySelectorAll('input[name="eje"]:checked')).map(cb => cb.value),
                 metodologiaActiva: metodologia,
+                 // ========== AQUÍ SE AÑADE EL MÓDULO DE PROYECCIÓN ==========
+                proyeccionGeneral: {
+                    metodologiaProyeccion: metodologiaProyeccion,
+                    areasProyeccion: areasProyeccionGuardar,
+                    saberesProyeccionSeleccionados: Array.from(saberesProyeccionSeleccionados),
+                    textoEvaluacionProyeccion: textoEvaluacionProyeccion
+                },
                 semanas: semanas,
                 reflexiones: {
                     queFunciono: document.getElementById('queFunciono').value,
@@ -4066,6 +4097,38 @@
                     document.getElementById('metodologiaPersonalizadaContainer').classList.add('visible');
                 }
             }
+
+            // ========== CARGAR DATOS DE PROYECCIÓN GENERAL ==========
+            if (plan.proyeccionGeneral) {
+                console.log('📥 Cargando módulo de proyección...');
+                
+                // 1. Metodología de proyección (inmediato)
+                if (plan.proyeccionGeneral.metodologiaProyeccion) {
+                    document.getElementById('metodologia-proyeccion').value = plan.proyeccionGeneral.metodologiaProyeccion;
+                }
+                
+                // 2. Texto de evaluación (inmediato)
+                if (plan.proyeccionGeneral.textoEvaluacionProyeccion) {
+                    const evalBox = document.querySelector('#modulo-proyeccion-general .contenedor-editable[data-placeholder*="Ejemplo"]');
+                    if (evalBox) {
+                        evalBox.textContent = plan.proyeccionGeneral.textoEvaluacionProyeccion;
+                    }
+                }
+                
+                // 3. Guardar saberes para restaurar después
+                if (plan.proyeccionGeneral.saberesProyeccionSeleccionados) {
+                    saberesProyeccionSeleccionados = new Set(plan.proyeccionGeneral.saberesProyeccionSeleccionados);
+                    console.log('💾 Saberes guardados para restaurar:', saberesProyeccionSeleccionados.size);
+                }
+                
+                // 4. Cargar áreas DESPUÉS de que se cargue todo lo básico
+                if (plan.proyeccionGeneral.areasProyeccion) {
+                    setTimeout(() => {
+                        cargarAreasDeProyeccion(plan.proyeccionGeneral.areasProyeccion);
+                    }, 800); // 800ms después de cargar lo básico
+                }
+            }
+            // ========== FIN CARGAR PROYECCIÓN ==========
             
             if (plan.semanas && plan.semanas.length > 0) {
                 semanas = plan.semanas;
@@ -6238,8 +6301,102 @@
             // Actualizar cuando cambien las lecciones planificadas
             document.getElementById('leccionesPlanificadas').addEventListener('change', sincronizarLeccionesProyeccion);
         });
+
+        /**
+ * Carga las áreas de conocimiento en el módulo de proyección
+ */
+function cargarAreasDeProyeccion(areasArray) {
+    if (!areasArray || areasArray.length === 0) return;
+    
+    console.log('📍 Cargando áreas de proyección:', areasArray);
+    
+    // Mapeo: nombre área → ID del checkbox
+    const mapaCheckboxes = {
+        'Apropiación tecnológica y Digital': 'area-proyeccion-apropiacion',
+        'Programación y Algoritmos': 'area-proyeccion-programacion',
+        'Computación física y Robótica': 'area-proyeccion-robotica',
+        'Ciencia de datos e Inteligencia artificial': 'area-proyeccion-ciencia'
+    };
+    
+    // Marcar cada checkbox
+    areasArray.forEach(nombreArea => {
+        const idCheckbox = mapaCheckboxes[nombreArea];
+        if (idCheckbox) {
+            const checkbox = document.getElementById(idCheckbox);
+            if (checkbox) {
+                checkbox.checked = true;
+                console.log('✅ Área marcada:', nombreArea);
+            }
+        }
+    });
+    
+    // Ejecutar la función que actualiza RdA y saberes
+    if (typeof actualizarAreasProyeccion === 'function') {
+        setTimeout(() => {
+            actualizarAreasProyeccion();
+            
+            // Después de actualizar áreas, restaurar saberes
+            setTimeout(() => {
+                restaurarSaberesProyeccion();
+            }, 600);
+        }, 300);
+    }
+}
+
+/**
+ * Restaura los saberes conceptuales seleccionados
+ */
+function restaurarSaberesProyeccion() {
+    if (saberesProyeccionSeleccionados.size === 0) {
+        console.log('📝 No hay saberes para restaurar');
+        return;
+    }
+    
+    console.log('🔍 Buscando', saberesProyeccionSeleccionados.size, 'saberes para restaurar...');
+    
+    // Esperar a que se rendericen los saberes
+    setTimeout(() => {
+        const checkboxes = document.querySelectorAll('#saberes-conceptuales-proyeccion-detalle input[type="checkbox"]');
+        let restaurados = 0;
+        
+        checkboxes.forEach(checkbox => {
+            const itemSaber = checkbox.closest('.saber-conceptual-item');
+            if (!itemSaber) return;
+            
+            const nombreElemento = itemSaber.querySelector('div > div:first-child');
+            if (!nombreElemento) return;
+            
+            // Extraer nombre limpio (sin M1/M2)
+            let nombreSaber = nombreElemento.textContent.trim();
+            nombreSaber = nombreSaber.replace(/\s*M[12]\s*$/, '').trim();
+            
+            // Si este saber estaba seleccionado
+            if (saberesProyeccionSeleccionados.has(nombreSaber)) {
+                checkbox.checked = true;
+                itemSaber.classList.add('seleccionado');
+                restaurados++;
+                
+                // Activar la función para actualizar indicadores
+                setTimeout(() => {
+                    if (typeof manejarSeleccionSaberProyeccion === 'function') {
+                        manejarSeleccionSaberProyeccion(nombreSaber, true, '', '');
+                    }
+                }, 100);
+            }
+        });
+        
+        console.log('🎯 Saberes restaurados:', restaurados, 'de', saberesProyeccionSeleccionados.size);
+        
+        // Actualizar el contenedor visual
+        if (typeof actualizarContenedorSaberesConceptualesProyeccion === 'function') {
+            actualizarContenedorSaberesConceptualesProyeccion();
+        }
+        
+    }, 500); // Dar tiempo para renderizar
+}
         
         // ======================= FIN FUNCIONES PROYECCIÓN GENERAL =======================  
     </script>
 </body>
 </html>
+
