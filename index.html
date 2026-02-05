@@ -2624,7 +2624,6 @@
         let formatoExportacion = 'pdf'; // ← Cambiado a PDF por defecto
         let areasProyeccion = [];
         let saberesProyeccionSeleccionados = new Set();
-        
          
         // Inicialización
         document.addEventListener('DOMContentLoaded', function() {
@@ -3993,36 +3992,6 @@
             if (metodologia === 'otra') {
                 metodologia = document.getElementById('metodologiaPersonalizada').value || 'Otra metodología (personalizada)';
             }
-
-            // ========== DATOS DEL MÓDULO DE PROYECCIÓN ==========
-            // 1. Metodología de proyección
-            const metodologiaProyeccion = document.getElementById('metodologia-proyeccion').value;
-            
-            // 2. Áreas seleccionadas en proyección
-            const areasProyeccionGuardar = [];
-            document.querySelectorAll('input[name="area-proyeccion"]:checked').forEach(checkbox => {
-                const mapaAreas = {
-                    'apropiacion': 'Apropiación tecnológica y Digital',
-                    'programacion': 'Programación y Algoritmos',
-                    'robotica': 'Computación física y Robótica',
-                    'ciencia': 'Ciencia de datos e Inteligencia artificial'
-                };
-                if (mapaAreas[checkbox.value]) {
-                    areasProyeccionGuardar.push(mapaAreas[checkbox.value]);
-                }
-            });
-            
-            // 3. Texto de evaluación (guarda HTML para mantener formato)
-            // 3. Texto de evaluación (solo texto plano)
-            let htmlEvaluacionProyeccion = '';
-            let textoEvaluacionProyeccion = '';
-            const elementoEvaluacion = document.querySelector('#modulo-proyeccion-general .contenedor-editable[data-placeholder*="Ejemplo"]');
-            if (elementoEvaluacion) {
-                htmlEvaluacionProyeccion = elementoEvaluacion.innerHTML || '';
-                textoEvaluacionProyeccion = elementoEvaluacion.textContent || '';
-            }
-
-            // ========== FIN DATOS PROYECCIÓN ==========
             
             return {
                 informacionGeneral: {
@@ -4042,14 +4011,6 @@
                 },
                 ejesTransversales: Array.from(document.querySelectorAll('input[name="eje"]:checked')).map(cb => cb.value),
                 metodologiaActiva: metodologia,
-                // ========== AQUÍ SE AÑADE EL MÓDULO DE PROYECCIÓN ==========
-                proyeccionGeneral: {
-                    metodologiaProyeccion: metodologiaProyeccion,
-                    areasProyeccion: areasProyeccionGuardar,
-                    saberesProyeccionSeleccionados: Array.from(saberesProyeccionSeleccionados),
-                    htmlEvaluacionProyeccion: htmlEvaluacionProyeccion,
-                    textoEvaluacionProyeccion: textoEvaluacionProyeccion
-                },
                 semanas: semanas,
                 reflexiones: {
                     queFunciono: document.getElementById('queFunciono').value,
@@ -4091,6 +4052,7 @@
             }
             
             if (plan.metodologiaActiva) {
+                // Manejar metodología personalizada
                 const metodologia = plan.metodologiaActiva;
                 if (metodologia.includes('ABJ') || metodologia.includes('Aprendizaje basado en juegos')) {
                     document.getElementById('metodologiaActiva').value = 'ABJ';
@@ -4655,9 +4617,6 @@
             if (contenidoLimpio === 'No especificado' || contenidoLimpio.trim() === '') {
                 return '<div style="color: #999; font-style: italic; font-size: 8.5pt;">No especificado</div>';
             }
-
-            // ELIMINAR etiquetas [Módulo X]
-            let textoSinModulos = contenidoLimpio.replace(/\[\s*Módulo\s*[12]\s*\]/g, '');
             
             // Dividir por puntos para mejor legibilidad
             const lineas = contenidoLimpio.split(/(?<=\.)\s+/).filter(linea => linea.trim());
@@ -4668,14 +4627,9 @@
             
             // Crear párrafos más compactos para PDF
             let resultado = '';
-
+            
             lineas.forEach(linea => {
-            // Limpiar espacios extra
-            linea = linea.trim();
-            if (!linea) return;
-
-            // Si es una lista con números o viñetas
-            lineas.forEach(linea => {
+                // Si es una lista con números o viñetas
                 if (linea.match(/^\d+[-).]/) || linea.match(/^[•\-]/)) {
                     resultado += `<div style="margin-bottom: 1.5mm; padding-left: 1mm; line-height: 1.3; font-size: 8.5pt;">${linea.trim()}</div>`;
                 } else {
@@ -6285,55 +6239,7 @@
             document.getElementById('leccionesPlanificadas').addEventListener('change', sincronizarLeccionesProyeccion);
         });
         
-        // ======================= FIN FUNCIONES PROYECCIÓN GENERAL ======================= 
-
-        // ========== FUNCIONES AUXILIARES PARA CARGAR PROYECCIÓN ==========
-
-        /**
-         * Carga las áreas de conocimiento en el módulo de proyección
-         */
-        function cargarAreasDeProyeccion(areasArray) {
-            if (!areasArray || areasArray.length === 0) return;
-            
-            console.log('📍 Cargando áreas de proyección:', areasArray);
-            
-            // Mapeo: nombre área → ID del checkbox
-            const mapaCheckboxes = {
-                'Apropiación tecnológica y Digital': 'area-proyeccion-apropiacion',
-                'Programación y Algoritmos': 'area-proyeccion-programacion',
-                'Computación física y Robótica': 'area-proyeccion-robotica',
-                'Ciencia de datos e Inteligencia artificial': 'area-proyeccion-ciencia'
-            };
-            
-            // Marcar cada checkbox
-            areasArray.forEach(nombreArea => {
-                const idCheckbox = mapaCheckboxes[nombreArea];
-                if (idCheckbox) {
-                    const checkbox = document.getElementById(idCheckbox);
-                    if (checkbox) {
-                        checkbox.checked = true;
-                        console.log('✅ Área marcada:', nombreArea);
-                    }
-                }
-            });
-            
-            // Ejecutar la función que actualiza RdA y saberes
-            if (typeof actualizarAreasProyeccion === 'function') {
-                setTimeout(() => {
-                    actualizarAreasProyeccion();
-                    
-                    // Después de actualizar áreas, restaurar saberes
-                    setTimeout(() => {
-                        restaurarSaberesProyeccion();
-                    }, 600);
-                }, 300);
-            }
-        }
-        
+        // ======================= FIN FUNCIONES PROYECCIÓN GENERAL =======================  
     </script>
 </body>
 </html>
-
-
-
-
