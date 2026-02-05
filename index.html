@@ -966,9 +966,6 @@
                       <div style="margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px dashed #ddd;">
                           <strong style="color: #45258F; font-size: 11px;">Todos los saberes procedimentales disponibles:</strong>
                       </div>
-                      <div id="procedimentales-proyeccion-container" style="display: flex; flex-direction: column; gap: 6px; max-height: 140px; overflow-y: auto;">
-                        <!-- Los checkboxes se generarán aquí -->
-                      </div>
                       <div style="display: flex; flex-direction: column; gap: 6px; max-height: 140px; overflow-y: auto;">
                           <div style="font-size: 10px; padding: 3px 0; border-left: 2px solid #6c47c9; padding-left: 6px;">• Reconoce patrones</div>
                           <div style="font-size: 10px; padding: 3px 0; border-left: 2px solid #6c47c9; padding-left: 6px;">• Abstrae</div>
@@ -994,9 +991,6 @@
                       <div style="margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px dashed #ddd;">
                           <strong style="color: #45258F; font-size: 11px;">Todos los saberes actitudinales disponibles:</strong>
                       </div>
-                      <div id="actitudinales-proyeccion-container" style="display: flex; flex-direction: column; gap: 6px; max-height: 140px; overflow-y: auto;">
-                        <!-- Los checkboxes se generarán aquí -->
-                     </div>
                       <div style="display: flex; flex-direction: column; gap: 6px; max-height: 140px; overflow-y: auto;">
                           <div style="font-size: 10px; padding: 3px 0; border-left: 2px solid #28a745; padding-left: 6px;">• Gusto por la precisión</div>
                           <div style="font-size: 10px; padding: 3px 0; border-left: 2px solid #28a745; padding-left: 6px;">• Aprender del error</div>
@@ -2630,8 +2624,7 @@
         let formatoExportacion = 'pdf'; // ← Cambiado a PDF por defecto
         let areasProyeccion = [];
         let saberesProyeccionSeleccionados = new Set();
-        let saberesProcedimentalesProyeccion = new Set();
-        let saberesActitudinalesProyeccion = new Set();
+        
          
         // Inicialización
         document.addEventListener('DOMContentLoaded', function() {
@@ -4029,12 +4022,6 @@
                 textoEvaluacionProyeccion = elementoEvaluacion.textContent || '';
             }
 
-            // 4. Saberes procedimentales seleccionados
-            const procedimentalesProyeccionGuardar = Array.from(saberesProcedimentalesProyeccion);
-            
-            // 5. Saberes actitudinales seleccionados
-            const actitudinalesProyeccionGuardar = Array.from(saberesActitudinalesProyeccion);
-
             // ========== FIN DATOS PROYECCIÓN ==========
             
             return {
@@ -4060,8 +4047,6 @@
                     metodologiaProyeccion: metodologiaProyeccion,
                     areasProyeccion: areasProyeccionGuardar,
                     saberesProyeccionSeleccionados: Array.from(saberesProyeccionSeleccionados),
-                    procedimentalesProyeccion: procedimentalesProyeccionGuardar,  // ← NUEVO
-                    actitudinalesProyeccion: actitudinalesProyeccionGuardar,      // ← NUEVO
                     htmlEvaluacionProyeccion: htmlEvaluacionProyeccion,
                     textoEvaluacionProyeccion: textoEvaluacionProyeccion
                 },
@@ -6345,191 +6330,10 @@
             }
         }
         
-        /**
-         * Restaura los saberes conceptuales seleccionados
-         */
-        function restaurarSaberesProyeccion() {
-            if (saberesProyeccionSeleccionados.size === 0) {
-                console.log('📝 No hay saberes para restaurar');
-                return;
-            }
-            
-            console.log('🔍 Buscando', saberesProyeccionSeleccionados.size, 'saberes para restaurar...');
-            
-            // Esperar a que se rendericen los saberes
-            setTimeout(() => {
-                const checkboxes = document.querySelectorAll('#saberes-conceptuales-proyeccion-detalle input[type="checkbox"]');
-                let restaurados = 0;
-                
-                checkboxes.forEach(checkbox => {
-                    const itemSaber = checkbox.closest('.saber-conceptual-item');
-                    if (!itemSaber) return;
-                    
-                    const nombreElemento = itemSaber.querySelector('div > div:first-child');
-                    if (!nombreElemento) return;
-                    
-                    // Extraer nombre limpio (sin M1/M2)
-                    let nombreSaber = nombreElemento.textContent.trim();
-                    nombreSaber = nombreSaber.replace(/\s*M[12]\s*$/, '').trim();
-                    
-                    // Si este saber estaba seleccionado
-                    if (saberesProyeccionSeleccionados.has(nombreSaber)) {
-                        checkbox.checked = true;
-                        itemSaber.classList.add('seleccionado');
-                        restaurados++;
-                        
-                        // Activar la función para actualizar indicadores
-                        setTimeout(() => {
-                            if (typeof manejarSeleccionSaberProyeccion === 'function') {
-                                manejarSeleccionSaberProyeccion(nombreSaber, true, '', '');
-                            }
-                        }, 100);
-                    }
-                });
-                
-                console.log('🎯 Saberes restaurados:', restaurados, 'de', saberesProyeccionSeleccionados.size);
-                
-                // Actualizar el contenedor visual
-                if (typeof actualizarContenedorSaberesConceptualesProyeccion === 'function') {
-                    actualizarContenedorSaberesConceptualesProyeccion();
-                }
-                
-            }, 500); // Dar tiempo para renderizar
-        }
-
-         // ===== FUNCIÓN PARA GENERAR CHECKBOXES DE PROCEDIMENTALES/ACTITUDINALES =====
-        function generarCheckboxesProyeccion() {
-            console.log("Generando checkboxes de proyección...");
-            
-            // Procedimentales con tooltips
-            const procedimentales = [
-                { value: "reconoce", label: "Reconoce patrones", tooltip: "Predice a partir de las regularidades, similitudes o características comunes..." },
-                { value: "abstrae", label: "Abstrae", tooltip: "Concluye cuáles son las características relevantes que debe considerar..." },
-                { value: "generaliza", label: "Generaliza", tooltip: "Generaliza las funcionalidades o estructuras generales..." },
-                { value: "transfiere", label: "Transfiere", tooltip: "Transfiere conocimientos, habilidades y estrategias..." },
-                { value: "modulariza", label: "Modulariza", tooltip: "Resuelve un problema por partes menos complejas..." },
-                { value: "formula", label: "Formula algoritmos", tooltip: "Formula algoritmos por medio de una secuencia ordenada..." },
-                { value: "remezcla", label: "Remezcla", tooltip: "Combina diferentes ideas, técnicas o soluciones existentes..." },
-                { value: "depura", label: "Depura", tooltip: "Valida el funcionamiento de los algoritmos en busca de errores..." },
-                { value: "programa", label: "Programa", tooltip: "Programa mediante un entorno o IDE de programación..." },
-                { value: "comunica", label: "Comunica", tooltip: "Comunica ideas o soluciones a problemas..." },
-                { value: "colabora", label: "Colabora", tooltip: "Demuestra un trato constructivo y respetuoso..." },
-                { value: "piensa", label: "Piensa de forma creativa", tooltip: "Desarrolla soluciones ingeniosas, innovadoras..." },
-                { value: "maneja", label: "Maneja las tecnologías de forma ética y segura", tooltip: "Aplica de manera consciente fundamentos de ética..." }
-            ];
-            
-            // Actitudinales con tooltips
-            const actitudinales = [
-                { value: "gusto", label: "Gusto por la precisión", tooltip: "Demuestra ante los procesos de aprendizaje un comportamiento hacia la búsqueda de la exactitud..." },
-                { value: "aprender", label: "Aprender del error", tooltip: "Demuestra ante los errores un comportamiento que le permita ganar experiencia..." },
-                { value: "flexibilidad", label: "Flexibilidad para manejar problemas", tooltip: "Demuestra un comportamiento hacia la adaptabilidad, flexibilidad..." },
-                { value: "tolerancia", label: "Tolerancia a la frustración", tooltip: "Demuestra ante los desafíos, un comportamiento hacia la búsqueda de la autoconfianza..." }
-            ];
-            
-            // Generar procedimentales
-            const contenedorProc = document.getElementById('procedimentales-proyeccion-container');
-            if (contenedorProc) {
-                let htmlProc = '';
-                procedimentales.forEach(proc => {
-                    const estaSeleccionado = saberesProcedimentalesProyeccion.has(proc.value);
-                    htmlProc += `
-                        <div style="margin-bottom: 4px;">
-                            <label class="tooltip-improved">
-                                <input type="checkbox" name="procedimental-proyeccion" value="${proc.value}" 
-                                       ${estaSeleccionado ? 'checked' : ''}
-                                       onchange="manejarSeleccionProcedimentalProyeccion('${proc.value}', this.checked)">
-                                <span style="font-size: 10px; ${estaSeleccionado ? 'font-weight: 600; color: #45258F;' : ''}">${proc.label}</span>
-                                <span class="tooltiptext-improved">${proc.tooltip}</span>
-                            </label>
-                        </div>
-                    `;
-                });
-                contenedorProc.innerHTML = htmlProc;
-            }
-            
-            // Generar actitudinales
-            const contenedorAct = document.getElementById('actitudinales-proyeccion-container');
-            if (contenedorAct) {
-                let htmlAct = '';
-                actitudinales.forEach(act => {
-                    const estaSeleccionado = saberesActitudinalesProyeccion.has(act.value);
-                    htmlAct += `
-                        <div style="margin-bottom: 4px;">
-                            <label class="tooltip-improved">
-                                <input type="checkbox" name="actitudinal-proyeccion" value="${act.value}" 
-                                       ${estaSeleccionado ? 'checked' : ''}
-                                       onchange="manejarSeleccionActitudinalProyeccion('${act.value}', this.checked)">
-                                <span style="font-size: 10px; ${estaSeleccionado ? 'font-weight: 600; color: #28a745;' : ''}">${act.label}</span>
-                                <span class="tooltiptext-improved">${act.tooltip}</span>
-                            </label>
-                        </div>
-                    `;
-                });
-                contenedorAct.innerHTML = htmlAct;
-            }
-        }  
-
-           // ===== FUNCIONES PARA MANEJAR SELECCIÓN =====
-            function manejarSeleccionProcedimentalProyeccion(valor, seleccionado) {
-                if (seleccionado) {
-                    saberesProcedimentalesProyeccion.add(valor);
-                } else {
-                    saberesProcedimentalesProyeccion.delete(valor);
-                }
-                console.log("Procedimentales seleccionados:", Array.from(saberesProcedimentalesProyeccion));
-            }
-            
-            function manejarSeleccionActitudinalProyeccion(valor, seleccionado) {
-                if (seleccionado) {
-                    saberesActitudinalesProyeccion.add(valor);
-                } else {
-                    saberesActitudinalesProyeccion.delete(valor);
-                }
-                console.log("Actitudinales seleccionados:", Array.from(saberesActitudinalesProyeccion));
-            } 
-
-            // ===== FUNCIÓN PARA RESTAURAR CHECKBOXES AL CARGAR =====
-            function restaurarCheckboxesProcedimentalesActitudinales() {
-                console.log("Restaurando checkboxes de procedimentales/actitudinales...");
-                
-                // 1. Restaurar procedimentales
-                document.querySelectorAll('input[name="procedimental-proyeccion"]').forEach(checkbox => {
-                    if (saberesProcedimentalesProyeccion.has(checkbox.value)) {
-                        checkbox.checked = true;
-                        // Marcar visualmente el label
-                        const label = checkbox.closest('label');
-                        if (label) {
-                            const span = label.querySelector('span');
-                            if (span) {
-                                span.style.fontWeight = '600';
-                                span.style.color = '#45258F';
-                            }
-                        }
-                    }
-                });
-                
-                // 2. Restaurar actitudinales
-                document.querySelectorAll('input[name="actitudinal-proyeccion"]').forEach(checkbox => {
-                    if (saberesActitudinalesProyeccion.has(checkbox.value)) {
-                        checkbox.checked = true;
-                        // Marcar visualmente el label
-                        const label = checkbox.closest('label');
-                        if (label) {
-                            const span = label.querySelector('span');
-                            if (span) {
-                                span.style.fontWeight = '600';
-                                span.style.color = '#28a745';
-                            }
-                        }
-                    }
-                });
-                
-                console.log("Checkboxes restaurados - Procedimentales:", saberesProcedimentalesProyeccion.size, 
-                            "Actitudinales:", saberesActitudinalesProyeccion.size);
-            }
     </script>
 </body>
 </html>
+
 
 
 
