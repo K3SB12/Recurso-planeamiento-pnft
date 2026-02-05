@@ -4106,7 +4106,6 @@
             }
             
             if (plan.metodologiaActiva) {
-                // Manejar metodología personalizada
                 const metodologia = plan.metodologiaActiva;
                 if (metodologia.includes('ABJ') || metodologia.includes('Aprendizaje basado en juegos')) {
                     document.getElementById('metodologiaActiva').value = 'ABJ';
@@ -4120,79 +4119,6 @@
                     document.getElementById('metodologiaPersonalizadaContainer').classList.add('visible');
                 }
             }
-
-            // ========== CARGAR DATOS DE PROYECCIÓN GENERAL ==========
-            if (plan.proyeccionGeneral) {
-                console.log('📥 Cargando módulo de proyección...');
-                
-                // 1. Metodología de proyección (inmediato)
-                if (plan.proyeccionGeneral.metodologiaProyeccion) {
-                    document.getElementById('metodologia-proyeccion').value = plan.proyeccionGeneral.metodologiaProyeccion;
-                }
-                
-                // 2. Texto de evaluación (usa HTML si existe, sino texto plano)
-                if (plan.proyeccionGeneral.htmlEvaluacionProyeccion) {
-                    const evalBox = document.querySelector('#modulo-proyeccion-general .contenedor-editable[data-placeholder*="Ejemplo"]');
-                    if (evalBox) {
-                        evalBox.innerHTML = plan.proyeccionGeneral.htmlEvaluacionProyeccion;
-                    }
-                } else if (plan.proyeccionGeneral.textoEvaluacionProyeccion) {
-                    const evalBox = document.querySelector('#modulo-proyeccion-general .contenedor-editable[data-placeholder*="Ejemplo"]');
-                    if (evalBox) {
-                        evalBox.textContent = plan.proyeccionGeneral.textoEvaluacionProyeccion;
-                    }
-                }
-                
-                // 3. Guardar saberes para restaurar después
-                if (plan.proyeccionGeneral.saberesProyeccionSeleccionados) {
-                    saberesProyeccionSeleccionados = new Set(plan.proyeccionGeneral.saberesProyeccionSeleccionados);
-                    console.log('💾 Saberes guardados para restaurar:', saberesProyeccionSeleccionados.size);
-                }
-                
-                // 4. Cargar áreas DESPUÉS de que se cargue todo lo básico
-                if (plan.proyeccionGeneral.areasProyeccion) {
-                    setTimeout(() => {
-                        cargarAreasDeProyeccion(plan.proyeccionGeneral.areasProyeccion);
-                        
-                        // PASO 8: Generar checkboxes y restaurar DESPUÉS de cargar áreas
-                        setTimeout(() => {
-                            if (typeof generarCheckboxesProyeccion === 'function') {
-                                generarCheckboxesProyeccion();
-                                
-                                // Restaurar selecciones después de generar los checkboxes
-                                setTimeout(() => {
-                                    if (typeof restaurarCheckboxesProcedimentalesActitudinales === 'function') {
-                                        restaurarCheckboxesProcedimentalesActitudinales();
-                                    }
-                                }, 300);
-                            }
-                        }, 500);
-                    }, 800); // 800ms después de cargar lo básico
-                }
-               // 5. Cargar saberes procedimentales
-                if (plan.proyeccionGeneral.procedimentalesProyeccion) {
-                    saberesProcedimentalesProyeccion = new Set(plan.proyeccionGeneral.procedimentalesProyeccion);
-                }
-                
-                // 6. Cargar saberes actitudinales
-                if (plan.proyeccionGeneral.actitudinalesProyeccion) {
-                    saberesActitudinalesProyeccion = new Set(plan.proyeccionGeneral.actitudinalesProyeccion);
-                }
-
-                // 7. Generar checkboxes y restaurar selecciones
-                setTimeout(() => {
-                    if (typeof generarCheckboxesProyeccion === 'function') {
-                        generarCheckboxesProyeccion();
-                        
-                        setTimeout(() => {
-                            if (typeof restaurarCheckboxesProcedimentalesActitudinales === 'function') {
-                                restaurarCheckboxesProcedimentalesActitudinales();
-                            }
-                        }, 300);
-                    }
-                }, 1500);
-            }
-            // ========== FIN CARGAR PROYECCIÓN ==========
             
             if (plan.semanas && plan.semanas.length > 0) {
                 semanas = plan.semanas;
@@ -4233,7 +4159,7 @@
                 });
             }, 500);
             
-            alert('Plan cargado exitosamente (módulo de proyección incluido)');
+            alert('Plan cargado exitosamente');
         }
 
         // ===== FUNCIONES DE EXPORTACIÓN CORREGIDAS =====
@@ -6604,5 +6530,6 @@
     </script>
 </body>
 </html>
+
 
 
