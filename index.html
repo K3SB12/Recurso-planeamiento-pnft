@@ -3992,11 +3992,14 @@
             if (metodologia === 'otra') {
                 metodologia = document.getElementById('metodologiaPersonalizada').value || 'Otra metodología (personalizada)';
             }
-
-            // Datos del módulo de proyección
+        
+            // ========== DATOS DE PROYECCIÓN GENERAL ==========
+            console.log('💾 Guardando datos de proyección...');
+            
+            // 1. Metodología de proyección
             const metodologiaProyeccion = document.getElementById('metodologia-proyeccion').value;
             
-            // Obtener áreas seleccionadas en proyección
+            // 2. Áreas seleccionadas en proyección
             const areasProyeccionGuardar = [];
             document.querySelectorAll('input[name="area-proyeccion"]:checked').forEach(checkbox => {
                 const areaMapping = {
@@ -4005,17 +4008,29 @@
                     'robotica': 'Computación física y Robótica',
                     'ciencia': 'Ciencia de datos e Inteligencia artificial'
                 };
-                areasProyeccionGuardar.push(areaMapping[checkbox.value]);
+                if (areaMapping[checkbox.value]) {
+                    areasProyeccionGuardar.push(areaMapping[checkbox.value]);
+                }
             });
-
-       // 3. Texto de evaluación (solo texto plano)
-        let textoEvaluacionProyeccion = '';
-        const elementoEvaluacion = document.querySelector('#modulo-proyeccion-general .contenedor-editable[data-placeholder*="Ejemplo"]');
-        if (elementoEvaluacion) {
-            textoEvaluacionProyeccion = elementoEvaluacion.textContent || '';
-        }
-        
-        // ========== FIN DATOS PROYECCIÓN ==========
+            
+            // 3. Saberes conceptuales seleccionados
+            const saberesProyeccionArray = Array.from(saberesProyeccionSeleccionados);
+            
+            // 4. Texto de evaluación (solo texto plano)
+            let textoEvaluacionProyeccion = '';
+            const elementoEvaluacion = document.querySelector('#modulo-proyeccion-general .contenedor-editable[data-placeholder*="Ejemplo"]');
+            if (elementoEvaluacion) {
+                textoEvaluacionProyeccion = elementoEvaluacion.textContent || '';
+            }
+            
+            // 5. Lecciones totales de proyección
+            const leccionesProyeccion = document.getElementById('proyeccion-lecciones-totales').value || '';
+            
+            console.log('📊 Datos de proyección capturados:');
+            console.log('- Metodología:', metodologiaProyeccion);
+            console.log('- Áreas:', areasProyeccionGuardar);
+            console.log('- Saberes:', saberesProyeccionArray.length);
+            console.log('- Evaluación:', textoEvaluacionProyeccion.substring(0, 50) + '...');
             
             return {
                 informacionGeneral: {
@@ -4035,13 +4050,17 @@
                 },
                 ejesTransversales: Array.from(document.querySelectorAll('input[name="eje"]:checked')).map(cb => cb.value),
                 metodologiaActiva: metodologia,
-                 // ========== AQUÍ SE AÑADE EL MÓDULO DE PROYECCIÓN ==========
+                
+                // ========== MÓDULO DE PROYECCIÓN - AHORA SÍ SE GUARDA ==========
                 proyeccionGeneral: {
                     metodologiaProyeccion: metodologiaProyeccion,
                     areasProyeccion: areasProyeccionGuardar,
-                    saberesProyeccionSeleccionados: Array.from(saberesProyeccionSeleccionados),
-                    textoEvaluacionProyeccion: textoEvaluacionProyeccion
+                    saberesProyeccionSeleccionados: saberesProyeccionArray,
+                    textoEvaluacionProyeccion: textoEvaluacionProyeccion,
+                    leccionesTotalesProyeccion: leccionesProyeccion,
+                    fechaProyeccion: new Date().toISOString()
                 },
+                
                 semanas: semanas,
                 reflexiones: {
                     queFunciono: document.getElementById('queFunciono').value,
@@ -4121,11 +4140,48 @@
                     console.log('💾 Saberes guardados para restaurar:', saberesProyeccionSeleccionados.size);
                 }
                 
-                // 4. Cargar áreas DESPUÉS de que se cargue todo lo básico
+                // 4. Cargar áreas INMEDIATAMENTE, no con setTimeout
                 if (plan.proyeccionGeneral.areasProyeccion) {
-                    setTimeout(() => {
-                        cargarAreasDeProyeccion(plan.proyeccionGeneral.areasProyeccion);
-                    }, 800); // 800ms después de cargar lo básico
+                    console.log('📍 Cargando áreas:', plan.proyeccionGeneral.areasProyeccion);
+                    
+                    // Mapeo de áreas a IDs de checkboxes
+                    const areaMapping = {
+                        'Apropiación tecnológica y Digital': 'area-proyeccion-apropiacion',
+                        'Programación y Algoritmos': 'area-proyeccion-programacion',
+                        'Computación física y Robótica': 'area-proyeccion-robotica',
+                        'Ciencia de datos e Inteligencia artificial': 'area-proyeccion-ciencia'
+                    };
+                    
+                    // Desmarcar todos primero
+                    document.querySelectorAll('input[name="area-proyeccion"]').forEach(cb => {
+                        cb.checked = false;
+                    });
+                    
+                    // Marcar las áreas guardadas
+                    plan.proyeccionGeneral.areasProyeccion.forEach(areaNombre => {
+                        const checkboxId = areaMapping[areaNombre];
+                        if (checkboxId) {
+                            const checkbox = document.getElementById(checkboxId);
+                            if (checkbox) {
+                                checkbox.checked = true;
+                                console.log('✅ Área marcada:', areaNombre);
+                            }
+                        }
+                    });
+                    
+                    // Actualizar la proyección inmediatamente
+                    if (typeof actualizarAreasProyeccion === 'function') {
+                        setTimeout(() => {
+                            actualizarAreasProyeccion();
+                            
+                            // Restaurar saberes después de actualizar áreas
+                            if (saberesProyeccionSeleccionados.size > 0) {
+                                setTimeout(() => {
+                                    restaurarSaberesProyeccion();
+                                }, 300);
+                            }
+                        }, 100);
+                    }
                 }
             }
             // ========== FIN CARGAR PROYECCIÓN ==========
@@ -6394,9 +6450,27 @@ function restaurarSaberesProyeccion() {
         
     }, 500); // Dar tiempo para renderizar
 }
+
+            // Función para verificar qué datos se están guardando
+        function verificarDatosGuardado() {
+            const datos = obtenerDatosPlan();
+            console.log('🔍 VERIFICACIÓN DE DATOS A GUARDAR:');
+            console.log('1. Módulo de proyección existe:', !!datos.proyeccionGeneral);
+            console.log('2. Metodología proyección:', datos.proyeccionGeneral.metodologiaProyeccion);
+            console.log('3. Áreas proyección:', datos.proyeccionGeneral.areasProyeccion);
+            console.log('4. Saberes proyección:', datos.proyeccionGeneral.saberesProyeccionSeleccionados.length);
+            console.log('5. Texto evaluación:', datos.proyeccionGeneral.textoEvaluacionProyeccion.substring(0, 30) + '...');
+            console.log('6. Total de semanas:', datos.semanas.length);
+            
+            return datos;
+        }
+        
+        // Puedes probarlo temporalmente agregando esta línea antes de guardar:
+        // verificarDatosGuardado();
         
         // ======================= FIN FUNCIONES PROYECCIÓN GENERAL =======================  
     </script>
 </body>
 </html>
+
 
