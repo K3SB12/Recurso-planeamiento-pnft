@@ -4227,14 +4227,16 @@
             actualizarContadoresSemanas();
 
            // FORZAR ACTUALIZACIÓN DE SABERES CONCEPTUALES
-               setTimeout(() => {
-                   // Actualizar proyección
-                   if (plan.proyeccionGeneral) {
-                       actualizarAreasProyeccion();
-                       actualizarSaberesConceptualesProyeccion();
-                       actualizarIndicadoresProyeccion();
-                   }, 500); // Un poco más de tiempo para asegurar renderizado
-        }
+           setTimeout(() => {
+               // Actualizar proyección
+                  /* COMENTA TEMPORALMENTE ESTO:
+                     if (plan.proyeccionGeneral) {
+                         actualizarAreasProyeccion();
+                         actualizarSaberesConceptualesProyeccion();
+                         actualizarIndicadoresProyeccion(); 
+                     }, 500); // Un poco más de tiempo para asegurar renderizado
+          }
+           */
                    
                    // Actualizar semanas
                    semanas.forEach((semana, index) => {
@@ -6382,5 +6384,6 @@
     </script>
 </body>
 </html>
+
 
 
