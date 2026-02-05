@@ -870,101 +870,201 @@
 
         <!-- DETALLES DE METODOLOGÍAS - ELIMINADOS -->
 
-        <!-- ======================= INICIO: MÓDULO PROYECCIÓN GENERAL ======================= -->
-        <div id="modulo-proyeccion-general" style="margin: 30px 0; padding: 20px; border: 3px solid #45258F; border-radius: 10px; background: #f8f9fa;">
-        
-            <!-- TÍTULO DEL MÓDULO -->
-            <h3 style="text-align: center; color: #45258F; margin-bottom: 20px; font-size: 18px;">
-                📊 PROYECCIÓN GENERAL DEL MÓDULO - Visión Integral
-            </h3>
-            
-            <!-- DESCRIPCIÓN -->
-            <div style="background: #e8f4fd; padding: 12px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #0d47a1;">
-                <p style="margin: 0; font-size: 12px; color: #333; line-height: 1.5;">
-                    <strong>Objetivo:</strong> Este módulo le permite planificar <strong>todos los saberes e indicadores</strong> que abordará en el período completo. 
-                    Es la <strong>vista general</strong> que luego distribuirá en las semanas específicas de abajo.
-                </p>
-            </div>
-        
-            <!-- CAMPO DE LECCIONES (conectado al total) -->
-            <div style="margin-bottom: 15px;">
-                <label style="font-weight: 600; color: #45258F; font-size: 13px;">Lecciones Totales del Período</label>
-                <input type="text" 
-                       id="proyeccion-lecciones-totales" 
-                       class="input-field" 
-                       readonly 
-                       style="background: #f0f0f0; width: 120px;"
-                       placeholder="Total automático">
-                <span style="font-size: 11px; color: #666; margin-left: 10px;">(Se sincroniza con "Lecciones planificadas")</span>
-            </div>
-        
-            <!-- SECCIÓN DE SABERES CONCEPTUALES (PARA PROYECCIÓN) -->
-            <div style="margin: 20px 0;">
-                <div class="section-title" style="font-size: 14px;">Saberes conceptuales para esta proyección</div>
-                <textarea id="saberes-proyeccion-conceptuales" 
-                          class="textarea-field" 
-                          rows="4"
-                          placeholder="Seleccione o escriba los saberes conceptuales que proyecta trabajar en TODO el período. Estos mismos saberes podrá distribuirlos luego en las semanas específicas."></textarea>
-            </div>
-        
-            <!-- SABERES PROCEDIMENTALES Y ACTITUDINALES (PARA PROYECCIÓN) -->
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0;">
-                <div>
-                    <label style="font-weight: 600; color: #45258F; font-size: 13px;">Saberes procedimentales para esta proyección</label>
-                    <textarea id="saberes-proyeccion-procedimentales" 
-                              class="textarea-field" 
-                              rows="4"
-                              placeholder="Saberes procedimentales para todo el período..."></textarea>
-                </div>
-                <div>
-                    <label style="font-weight: 600; color: #45258F; font-size: 13px;">Saberes actitudinales para esta proyección</label>
-                    <textarea id="saberes-proyeccion-actitudinales" 
-                              class="textarea-field" 
-                              rows="4"
-                              placeholder="Saberes actitudinales para todo el período..."></textarea>
-                </div>
-            </div>
-        
-            <!-- INDICADORES DE LOGRO (PARA PROYECCIÓN) -->
-            <div style="margin: 20px 0;">
-                <label style="font-weight: 600; color: #45258F; font-size: 13px;">Indicadores de logro para esta proyección</label>
-                <textarea id="indicadores-proyeccion-logra" 
-                          class="textarea-field" 
-                          rows="4"
-                          placeholder="Indicadores de logro que proyecta alcanzar en TODO el período..."></textarea>
-                <div style="font-size: 11px; color: #666; margin-top: 5px;">
-                    <strong>Nota:</strong> Estos indicadores deben extraerse del Módulo 1 y/o Módulo 2 del PNFT según las áreas seleccionadas.
-                </div>
-            </div>
-        
-            <!-- ========== BOTÓN PARA GENERAR PROMPT DE PROYECCIÓN ========== -->
-            <div style="text-align: center; margin: 25px 0; padding: 15px; background: linear-gradient(135deg, #f0ebf9, #ffffff); border-radius: 8px; border: 2px dashed #45258F;">
-                <p style="font-weight: 600; color: #45258F; margin-bottom: 10px; font-size: 14px;">
-                    ¿Desea una sugerencia de secuencia y actividades basada en su PROYECCIÓN GENERAL?
-                </p>
-                <button type="button" 
-                        onclick="generarPromptProyeccionGeneral()" 
-                        style="background: linear-gradient(135deg, #667eea, #764ba2); 
-                               color: white; 
-                               border: none; 
-                               padding: 12px 24px; 
-                               border-radius: 6px; 
-                               font-size: 14px; 
-                               font-weight: 600; 
-                               cursor: pointer;
-                               transition: all 0.3s ease;">
-                    🧠 Generar Prompt para IA (Proyección General)
-                </button>
-                <p style="font-size: 11px; color: #666; margin-top: 10px;">
-                    Este botón creará un instructivo detallado para usar en ChatGPT, Copilot o similar.
-                </p>
-            </div>
-        
-            <!-- SEPARADOR VISUAL -->
-            <div style="height: 2px; background: linear-gradient(to right, transparent, #45258F, transparent); margin: 10px 0;"></div>
-        
-        </div>
-        <!-- ======================= FIN: MÓDULO PROYECCIÓN GENERAL ======================= -->
+       <!-- ======================= INICIO: MÓDULO PROYECCIÓN GENERAL REDISEÑADO ======================= -->
+      <div id="modulo-proyeccion-general" style="margin: 30px 0; padding: 20px; border: 3px solid #45258F; border-radius: 10px; background: #f8f9fa;">
+      
+          <!-- TÍTULO DEL MÓDULO -->
+          <h3 style="text-align: center; color: #45258F; margin-bottom: 20px; font-size: 18px;">
+              📊 PROYECCIÓN GENERAL DEL MÓDULO - Visión Integral
+          </h3>
+          
+          <!-- DESCRIPCIÓN -->
+          <div style="background: #e8f4fd; padding: 12px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #0d47a1;">
+              <p style="margin: 0; font-size: 12px; color: #333; line-height: 1.5;">
+                  <strong>Objetivo:</strong> Este módulo le permite planificar <strong>todos los saberes e indicadores</strong> que abordará en el período completo. 
+                  Es la <strong>vista general</strong> que luego distribuirá en las semanas específicas de abajo.
+              </p>
+          </div>
+      
+          <!-- LECCIONES Y METODOLOGÍA -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+              <div>
+                  <label style="font-weight: 600; color: #45258F; font-size: 13px;">Lecciones Totales del Período</label>
+                  <input type="text" 
+                         id="proyeccion-lecciones-totales" 
+                         class="input-field" 
+                         readonly 
+                         style="background: #f0f0f0; width: 100%;"
+                         placeholder="Total automático">
+                  <span style="font-size: 11px; color: #666; margin-top: 3px; display: block;">(Se sincroniza con "Lecciones planificadas")</span>
+              </div>
+              <div>
+                  <label style="font-weight: 600; color: #45258F; font-size: 13px;">Metodología Activa para el Período</label>
+                  <select id="metodologia-proyeccion" class="select-field" style="width: 100%;">
+                      <option value="">Misma que seleccionó arriba</option>
+                      <option value="ABJ">Aprendizaje basado en juegos (ABJ)</option>
+                      <option value="ABR">Aprendizaje basado en retos (ABR)</option>
+                      <option value="APD">Aprendizaje Pensamiento por Diseño (APD)</option>
+                      <option value="otra">Otra metodología</option>
+                  </select>
+              </div>
+          </div>
+      
+          <!-- ===== ÁREAS DE CONOCIMIENTO Y RDA (ESTILO IGUAL A SEMANAS) ===== -->
+          <div class="section-title" style="font-size: 14px; margin-top: 20px;">Áreas de conocimiento y RdA para la proyección</div>
+          
+          <div class="areas-rda-container">
+              <!-- COLUMNA IZQUIERDA: ÁREAS DE CONOCIMIENTO -->
+              <div class="areas-container">
+                  <div class="section-title">Áreas de conocimiento para esta proyección</div>
+                  <div class="areas-lista">
+                      <div class="area-item">
+                          <input type="checkbox" id="area-proyeccion-apropiacion" name="area-proyeccion" value="apropiacion" onchange="actualizarAreasProyeccion()">
+                          <span>Apropiación Tecnológica y Digital</span>
+                      </div>
+                      <div class="area-item">
+                          <input type="checkbox" id="area-proyeccion-programacion" name="area-proyeccion" value="programacion" onchange="actualizarAreasProyeccion()">
+                          <span>Programación y Algoritmos</span>
+                      </div>
+                      <div class="area-item">
+                          <input type="checkbox" id="area-proyeccion-robotica" name="area-proyeccion" value="robotica" onchange="actualizarAreasProyeccion()">
+                          <span>Computación física y Robótica</span>
+                      </div>
+                      <div class="area-item">
+                          <input type="checkbox" id="area-proyeccion-ciencia" name="area-proyeccion" value="ciencia" onchange="actualizarAreasProyeccion()">
+                          <span>Ciencia de datos e Inteligencia artificial</span>
+                      </div>
+                  </div>
+              </div>
+              
+              <!-- COLUMNA DERECHA: RESULTADOS DE APRENDIZAJE (RDA) -->
+              <div class="rda-container">
+                  <div class="section-title">Resultados de aprendizaje (RdA) para la proyección</div>
+                  <div id="rda-proyeccion-container">
+                      <div style="color: #666; font-style: italic; padding: 8px; font-size: 11px;">Seleccione al menos un área de conocimiento</div>
+                  </div>
+              </div>
+          </div>
+      
+          <!-- ===== SABERES POR DESARROLLO (3 COLUMNAS - IGUAL QUE SEMANAS) ===== -->
+          <div class="section-title">Saberes por Desarrollo - Proyección General</div>
+          <div class="saberes-grid">
+              <!-- COLUMNA 1: SABERES CONCEPTUALES -->
+              <div class="saber-columna">
+                  <div class="saber-titulo">Saberes Conceptuales (Saber)</div>
+                  <div class="saber-contenido" id="saberes-conceptuales-proyeccion" style="min-height: 180px;">
+                      <div style="color: #666; font-style: italic; font-size: 11px;">
+                          "Los saberes conceptuales se mostrarán automáticamente según las áreas seleccionadas"
+                      </div>
+                  </div>
+              </div>
+              
+              <!-- COLUMNA 2: SABERES PROCEDIMENTALES -->
+              <div class="saber-columna">
+                  <div class="saber-titulo">Saberes Procedimentales (Saber Hacer)</div>
+                  <div class="saber-contenido" style="min-height: 180px;">
+                      <div style="margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px dashed #ddd;">
+                          <strong style="color: #45258F; font-size: 11px;">Todos los saberes procedimentales disponibles:</strong>
+                      </div>
+                      <div style="display: flex; flex-direction: column; gap: 6px; max-height: 140px; overflow-y: auto;">
+                          <div style="font-size: 10px; padding: 3px 0; border-left: 2px solid #6c47c9; padding-left: 6px;">• Reconoce patrones</div>
+                          <div style="font-size: 10px; padding: 3px 0; border-left: 2px solid #6c47c9; padding-left: 6px;">• Abstrae</div>
+                          <div style="font-size: 10px; padding: 3px 0; border-left: 2px solid #6c47c9; padding-left: 6px;">• Generaliza</div>
+                          <div style="font-size: 10px; padding: 3px 0; border-left: 2px solid #6c47c9; padding-left: 6px;">• Transfiere</div>
+                          <div style="font-size: 10px; padding: 3px 0; border-left: 2px solid #6c47c9; padding-left: 6px;">• Modulariza</div>
+                          <div style="font-size: 10px; padding: 3px 0; border-left: 2px solid #6c47c9; padding-left: 6px;">• Formula algoritmos</div>
+                          <div style="font-size: 10px; padding: 3px 0; border-left: 2px solid #6c47c9; padding-left: 6px;">• Remezcla</div>
+                          <div style="font-size: 10px; padding: 3px 0; border-left: 2px solid #6c47c9; padding-left: 6px;">• Depura</div>
+                          <div style="font-size: 10px; padding: 3px 0; border-left: 2px solid #6c47c9; padding-left: 6px;">• Programa</div>
+                          <div style="font-size: 10px; padding: 3px 0; border-left: 2px solid #6c47c9; padding-left: 6px;">• Comunica</div>
+                          <div style="font-size: 10px; padding: 3px 0; border-left: 2px solid #6c47c9; padding-left: 6px;">• Colabora</div>
+                          <div style="font-size: 10px; padding: 3px 0; border-left: 2px solid #6c47c9; padding-left: 6px;">• Piensa de forma creativa</div>
+                          <div style="font-size: 10px; padding: 3px 0; border-left: 2px solid #6c47c9; padding-left: 6px;">• Maneja las tecnologías de forma ética y segura</div>
+                      </div>
+                  </div>
+              </div>
+              
+              <!-- COLUMNA 3: SABERES ACTITUDINALES -->
+              <div class="saber-columna">
+                  <div class="saber-titulo">Saberes Actitudinales (Saber Ser)</div>
+                  <div class="saber-contenido" style="min-height: 180px;">
+                      <div style="margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px dashed #ddd;">
+                          <strong style="color: #45258F; font-size: 11px;">Todos los saberes actitudinales disponibles:</strong>
+                      </div>
+                      <div style="display: flex; flex-direction: column; gap: 6px; max-height: 140px; overflow-y: auto;">
+                          <div style="font-size: 10px; padding: 3px 0; border-left: 2px solid #28a745; padding-left: 6px;">• Gusto por la precisión</div>
+                          <div style="font-size: 10px; padding: 3px 0; border-left: 2px solid #28a745; padding-left: 6px;">• Aprender del error</div>
+                          <div style="font-size: 10px; padding: 3px 0; border-left: 2px solid #28a745; padding-left: 6px;">• Flexibilidad para manejar problemas</div>
+                          <div style="font-size: 10px; padding: 3px 0; border-left: 2px solid #28a745; padding-left: 6px;">• Tolerancia a la frustración</div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      
+          <!-- ===== SABERES CONCEPTUALES POR ÁREA Y MÓDULO ===== -->
+          <div class="section-title">Saberes conceptuales para la proyección general (Seleccione los que aplicarán)</div>
+          <div id="saberes-conceptuales-proyeccion-detalle" style="background: #f8f9fa; padding: 12px; border-radius: 8px; border: 1px solid var(--border-color);">
+              <div style="color: #666; font-style: italic; font-size: 11px; padding: 10px; text-align: center;">
+                  Seleccione ciclo, nivel y áreas de conocimiento para ver los saberes disponibles
+              </div>
+          </div>
+      
+          <!-- ===== TABLA DE INDICADORES DE LOGRO Y EVALUACIÓN (2 COLUMNAS) ===== -->
+          <div style="margin: 20px 0;">
+              <div class="section-title" style="font-size: 14px;">Distribución de Indicadores de Logro y Evaluación</div>
+              
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                  
+                  <!-- COLUMNA IZQUIERDA: INDICADORES DE LOGRO (AUTOMÁTICOS) -->
+                  <div class="campo-editable">
+                      <div class="columna-titulo">Indicadores de logro seleccionados</div>
+                      <div class="contenedor-editable" id="indicadores-proyeccion-auto" style="min-height: 200px; font-size: 11px;">
+                          <div style="color: #666; font-style: italic; padding: 10px; text-align: center;">
+                              Los indicadores aparecerán automáticamente según los saberes conceptuales seleccionados
+                          </div>
+                      </div>
+                  </div>
+                  
+                  <!-- COLUMNA DERECHA: EVALUACIÓN (DOCENTE ASIGNA PORCENTAJES) -->
+                  <div class="campo-editable">
+                      <div class="columna-titulo">Evaluación (Asigne porcentajes)</div>
+                      <div class="contenedor-editable" contenteditable="true" data-placeholder="Ejemplo:&#10;• Trabajo Cotidiano #1 (5%): Indicadores X, Y&#10;• Tarea #1 (10%): Indicadores A, B&#10;• Prueba (25%): Indicadores C, D, E&#10;• Proyecto (15%): Indicadores F, G" style="min-height: 200px; font-size: 11px;">
+                      </div>
+                      <div style="font-size: 9px; color: #666; padding: 5px 10px; background: #f8f9fa; border-top: 1px solid var(--border-color);">
+                          <strong>Nota:</strong> Asigne los porcentajes según el componente de evaluación para Formación Tecnológica del MEP
+                      </div>
+                  </div>
+              </div>
+          </div>
+      
+          <!-- ===== BOTÓN PARA GENERAR PROMPT DE PROYECCIÓN ===== -->
+          <div style="text-align: center; margin: 25px 0; padding: 15px; background: linear-gradient(135deg, #f0ebf9, #ffffff); border-radius: 8px; border: 2px dashed #45258F;">
+              <p style="font-weight: 600; color: #45258F; margin-bottom: 10px; font-size: 14px;">
+                  ¿Desea una sugerencia de secuencia y actividades basada en su PROYECCIÓN GENERAL?
+              </p>
+              <button type="button" 
+                      onclick="generarPromptProyeccionGeneral()" 
+                      style="background: linear-gradient(135deg, #667eea, #764ba2); 
+                             color: white; 
+                             border: none; 
+                             padding: 12px 24px; 
+                             border-radius: 6px; 
+                             font-size: 14px; 
+                             font-weight: 600; 
+                             cursor: pointer;
+                             transition: all 0.3s ease;">
+                  🧠 Generar Prompt para IA (Proyección General)
+              </button>
+              <p style="font-size: 11px; color: #666; margin-top: 10px;">
+                  Este botón creará un instructivo detallado para usar en ChatGPT, Copilot o similar.
+              </p>
+          </div>
+      
+          <!-- SEPARADOR VISUAL -->
+          <div style="height: 2px; background: linear-gradient(to right, transparent, #45258F, transparent); margin: 10px 0;"></div>
+      
+      </div>
+      <!-- ======================= FIN: MÓDULO PROYECCIÓN GENERAL REDISEÑADO ======================= -->
         
         <!-- AQUÍ CONTINÚA LA SECCIÓN ORIGINAL "PLANIFICACIÓN POR SEMANAS" -->
 
@@ -2522,16 +2622,32 @@
         let saberesProcedimentalesGlobales = new Set();
         let saberesActitudinalesGlobales = new Set();
         let formatoExportacion = 'pdf'; // ← Cambiado a PDF por defecto
-
+        let areasProyeccion = [];
+        let saberesProyeccionSeleccionados = new Set();
+         
         // Inicialización
         document.addEventListener('DOMContentLoaded', function() {
             inicializarSemanas();
             configurarEventListeners();
+            inicializarProyeccion();  // ← AÑADE ESTA LÍNEA
         });
 
         function configurarEventListeners() {
             document.getElementById('leccionesPlanificadas').addEventListener('change', actualizarSemanasPreservandoContenido);
             document.getElementById('metodologiaActiva').addEventListener('change', manejarCambioMetodologia);
+            
+            // NUEVO: Inicializar proyección cuando cambien ciclo/nivel
+            document.getElementById('ciclo').addEventListener('change', function() {
+                setTimeout(() => {
+                    actualizarAreasProyeccion();
+                }, 100);
+            });
+            
+            document.getElementById('nivel').addEventListener('change', function() {
+                setTimeout(() => {
+                    actualizarAreasProyeccion();
+                }, 100);
+            });
         }
 
         function manejarCambioMetodologia() {
@@ -2600,6 +2716,349 @@
             }
             
             actualizarContadoresSemanas();
+        }
+
+         // ======================= FUNCIONES PARA PROYECCIÓN GENERAL =======================
+
+        // 1. ACTUALIZAR ÁREAS DE PROYECCIÓN
+        function actualizarAreasProyeccion() {
+            areasProyeccion = [];
+            const areaMapping = {
+                'apropiacion': 'Apropiación tecnológica y Digital',
+                'programacion': 'Programación y Algoritmos',
+                'robotica': 'Computación física y Robótica',
+                'ciencia': 'Ciencia de datos e Inteligencia artificial'
+            };
+            
+            // Obtener áreas seleccionadas
+            document.querySelectorAll('input[name="area-proyeccion"]:checked').forEach(checkbox => {
+                areasProyeccion.push(areaMapping[checkbox.value]);
+            });
+            
+            // Actualizar RdA
+            actualizarRdAProyeccion();
+            
+            // Actualizar saberes conceptuales
+            actualizarSaberesConceptualesProyeccion();
+        }
+        
+        // 2. ACTUALIZAR RDA DE PROYECCIÓN
+        function actualizarRdAProyeccion() {
+            const ciclo = document.getElementById('ciclo').value;
+            const rdaContainer = document.getElementById('rda-proyeccion-container');
+            
+            rdaContainer.innerHTML = '';
+            
+            if (!ciclo || areasProyeccion.length === 0) {
+                rdaContainer.innerHTML = '<div style="color: #666; font-style: italic; padding: 8px; font-size: 11px;">Seleccione al menos un área de conocimiento</div>';
+                return;
+            }
+            
+            areasProyeccion.forEach(areaNombre => {
+                if (RDA_POR_CICLO[ciclo] && RDA_POR_CICLO[ciclo][areaNombre]) {
+                    const rdaItem = document.createElement('div');
+                    rdaItem.className = 'rda-item';
+                    rdaItem.innerHTML = `<strong>${areaNombre}:</strong><br>${RDA_POR_CICLO[ciclo][areaNombre]}`;
+                    rdaContainer.appendChild(rdaItem);
+                }
+            });
+        }
+        
+        // 3. ACTUALIZAR SABERES CONCEPTUALES DE PROYECCIÓN
+        function actualizarSaberesConceptualesProyeccion() {
+            const container = document.getElementById('saberes-conceptuales-proyeccion-detalle');
+            const nivel = document.getElementById('nivel').value;
+            
+            if (!nivel || areasProyeccion.length === 0) {
+                container.innerHTML = '<div style="color: #666; font-style: italic; font-size: 11px; padding: 10px; text-align: center;">Seleccione ciclo, nivel y al menos un área de conocimiento</div>';
+                return;
+            }
+            
+            let html = '';
+            
+            // Mostrar saberes por área seleccionada
+            areasProyeccion.forEach(areaNombre => {
+                html += `<div style="margin-bottom: 20px;">`;
+                html += `<div style="font-weight: 600; color: var(--primary-color); margin-bottom: 8px; border-bottom: 2px solid var(--light-purple); padding-bottom: 4px; font-size: 12px;">${areaNombre}</div>`;
+                
+                // Buscar saberes en Módulo 1
+                if (PNFT_DATA[nivel] && PNFT_DATA[nivel]["Módulo 1"] && PNFT_DATA[nivel]["Módulo 1"][areaNombre]) {
+                    html += `<div style="margin: 5px 0 3px 0; padding-left: 5px; font-size: 10px; font-weight: 600; color: #45258F; background: #f0ebf9; padding: 3px 8px; border-radius: 4px; display: inline-block;">MÓDULO 1</div>`;
+                    
+                    PNFT_DATA[nivel]["Módulo 1"][areaNombre].saberes.forEach(saber => {
+                        const estaSeleccionado = saberesProyeccionSeleccionados.has(saber.nombre);
+                        
+                        html += `
+                            <div class="saber-conceptual-item ${estaSeleccionado ? 'seleccionado' : ''}" style="margin: 4px 0;">
+                                <input type="checkbox" 
+                                    ${estaSeleccionado ? 'checked' : ''}
+                                    onchange="manejarSeleccionSaberProyeccion('${saber.nombre}', this.checked, '${areaNombre}', \`${saber.indicadores.join('|')}\`)">
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 500; font-size: 11px;">
+                                        ${saber.nombre}
+                                        <span style="font-size: 9px; background: #45258F15; color: #45258F; padding: 1px 6px; border-radius: 10px; margin-left: 6px; border: 1px solid #45258F30; font-weight: 600;">M1</span>
+                                    </div>
+                                    <div class="indicador-logro">${saber.indicadores[0]}</div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+                
+                // Buscar saberes en Módulo 2
+                if (PNFT_DATA[nivel] && PNFT_DATA[nivel]["Módulo 2"] && PNFT_DATA[nivel]["Módulo 2"][areaNombre]) {
+                    html += `<div style="margin: 10px 0 3px 0; padding-left: 5px; font-size: 10px; font-weight: 600; color: #6c47c9; background: #f5f2ff; padding: 3px 8px; border-radius: 4px; display: inline-block;">MÓDULO 2</div>`;
+                    
+                    PNFT_DATA[nivel]["Módulo 2"][areaNombre].saberes.forEach(saber => {
+                        const estaSeleccionado = saberesProyeccionSeleccionados.has(saber.nombre);
+                        
+                        html += `
+                            <div class="saber-conceptual-item ${estaSeleccionado ? 'seleccionado' : ''}" style="margin: 4px 0;">
+                                <input type="checkbox" 
+                                    ${estaSeleccionado ? 'checked' : ''}
+                                    onchange="manejarSeleccionSaberProyeccion('${saber.nombre}', this.checked, '${areaNombre}', \`${saber.indicadores.join('|')}\`)">
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 500; font-size: 11px;">
+                                        ${saber.nombre}
+                                        <span style="font-size: 9px; background: #6c47c915; color: #6c47c9; padding: 1px 6px; border-radius: 10px; margin-left: 6px; border: 1px solid #6c47c930; font-weight: 600;">M2</span>
+                                    </div>
+                                    <div class="indicador-logro">${saber.indicadores[0]}</div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+                
+                html += `</div>`;
+            });
+            
+            container.innerHTML = html;
+            
+            // Actualizar también el contenedor de saberes conceptuales (columna 1)
+            actualizarContenedorSaberesConceptualesProyeccion();
+        }
+        
+        // 4. MANEJAR SELECCIÓN DE SABERES EN PROYECCIÓN
+        function manejarSeleccionSaberProyeccion(nombreSaber, seleccionado, area, indicadoresStr) {
+            if (seleccionado) {
+                saberesProyeccionSeleccionados.add(nombreSaber);
+            } else {
+                saberesProyeccionSeleccionados.delete(nombreSaber);
+            }
+            
+            // Actualizar la clase de selección visual
+            const checkboxes = document.querySelectorAll('#saberes-conceptuales-proyeccion-detalle input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                if (checkbox.nextElementSibling?.querySelector('div')?.textContent.includes(nombreSaber)) {
+                    checkbox.parentElement.classList.toggle('seleccionado', seleccionado);
+                }
+            });
+            
+            // Actualizar contenedor de saberes conceptuales
+            actualizarContenedorSaberesConceptualesProyeccion();
+            
+            // Actualizar indicadores automáticos
+            actualizarIndicadoresProyeccion();
+        }
+        
+        // 5. ACTUALIZAR CONTENEDOR DE SABERES CONCEPTUALES (COLUMNA 1)
+        function actualizarContenedorSaberesConceptualesProyeccion() {
+            const contenedor = document.getElementById('saberes-conceptuales-proyeccion');
+            
+            if (saberesProyeccionSeleccionados.size === 0) {
+                contenedor.innerHTML = '<div style="color: #666; font-style: italic; font-size: 11px;">"Los saberes conceptuales se mostrarán automáticamente según las áreas seleccionadas"</div>';
+                return;
+            }
+            
+            let html = '<div style="display: flex; flex-direction: column; gap: 6px;">';
+            
+            saberesProyeccionSeleccionados.forEach(saber => {
+                html += `
+                    <div style="padding: 6px; background: var(--light-purple); border-radius: 6px; border-left: 3px solid var(--primary-color);">
+                        <div style="font-weight: 500; font-size: 11px;">${saber}</div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            contenedor.innerHTML = html;
+        }
+        
+        // 6. ACTUALIZAR INDICADORES DE PROYECCIÓN (AUTOMÁTICOS)
+        function actualizarIndicadoresProyeccion() {
+            const indicadoresContainer = document.getElementById('indicadores-proyeccion-auto');
+            const nivel = document.getElementById('nivel').value;
+            
+            let indicadoresHTML = '';
+            
+            saberesProyeccionSeleccionados.forEach(saber => {
+                let encontrado = false;
+                
+                // Buscar en Módulo 1
+                if (PNFT_DATA[nivel] && PNFT_DATA[nivel]["Módulo 1"]) {
+                    for (const moduloArea in PNFT_DATA[nivel]["Módulo 1"]) {
+                        const saberData = PNFT_DATA[nivel]["Módulo 1"][moduloArea].saberes.find(s => s.nombre === saber);
+                        if (saberData) {
+                            encontrado = true;
+                            saberData.indicadores.forEach(indicador => {
+                                indicadoresHTML += `
+                                    <div style="margin-bottom: 6px; padding: 4px 0; border-bottom: 1px dotted #ddd; font-size: 11px;">
+                                        • ${indicador} 
+                                        <span style="color: #45258F; font-size: 9px; background: #45258F10; padding: 1px 4px; border-radius: 3px; margin-left: 4px;">[Módulo 1]</span>
+                                    </div>
+                                `;
+                            });
+                            break;
+                        }
+                    }
+                }
+                
+                // Buscar en Módulo 2 si no se encontró
+                if (!encontrado && PNFT_DATA[nivel] && PNFT_DATA[nivel]["Módulo 2"]) {
+                    for (const moduloArea in PNFT_DATA[nivel]["Módulo 2"]) {
+                        const saberData = PNFT_DATA[nivel]["Módulo 2"][moduloArea].saberes.find(s => s.nombre === saber);
+                        if (saberData) {
+                            saberData.indicadores.forEach(indicador => {
+                                indicadoresHTML += `
+                                    <div style="margin-bottom: 6px; padding: 4px 0; border-bottom: 1px dotted #ddd; font-size: 11px;">
+                                        • ${indicador} 
+                                        <span style="color: #6c47c9; font-size: 9px; background: #6c47c910; padding: 1px 4px; border-radius: 3px; margin-left: 4px;">[Módulo 2]</span>
+                                    </div>
+                                `;
+                            });
+                            break;
+                        }
+                    }
+                }
+            });
+            
+            if (indicadoresHTML === '') {
+                indicadoresHTML = '<div style="color: #666; font-style: italic; padding: 10px; text-align: center;">Los indicadores aparecerán automáticamente según los saberes conceptuales seleccionados</div>';
+            }
+            
+            indicadoresContainer.innerHTML = indicadoresHTML;
+        }
+        
+        // 7. SINCRONIZAR LECCIONES
+        function sincronizarLeccionesProyeccion() {
+            const leccionesTotales = document.getElementById('leccionesPlanificadas').value;
+            if (leccionesTotales) {
+                document.getElementById('proyeccion-lecciones-totales').value = leccionesTotales;
+            }
+        }
+        
+        // 8. INICIALIZAR PROYECCIÓN
+        function inicializarProyeccion() {
+            // Sincronizar lecciones inicialmente
+            sincronizarLeccionesProyeccion();
+            
+            // Actualizar cuando cambien las lecciones planificadas
+            document.getElementById('leccionesPlanificadas').addEventListener('change', sincronizarLeccionesProyeccion);
+            
+            // Actualizar proyección cuando cambie ciclo o nivel
+            document.getElementById('ciclo').addEventListener('change', function() {
+                setTimeout(() => {
+                    actualizarRdAProyeccion();
+                    actualizarSaberesConceptualesProyeccion();
+                }, 100);
+            });
+            
+            document.getElementById('nivel').addEventListener('change', function() {
+                setTimeout(() => {
+                    actualizarRdAProyeccion();
+                    actualizarSaberesConceptualesProyeccion();
+                }, 100);
+            });
+        }
+        
+        // 9. REEMPLAZAR la función generarPromptProyeccionGeneral existente
+        function generarPromptProyeccionGeneral() {
+            try {
+                const ciclo = document.getElementById('ciclo').value || 'No seleccionado';
+                const nivel = document.getElementById('nivel').value || 'No seleccionado';
+                const lecciones = document.getElementById('leccionesPlanificadas').value || 'No especificado';
+                
+                // Obtener datos de la NUEVA proyección
+                const metodologia = document.getElementById('metodologia-proyeccion').value || 
+                                   obtenerMetodologiaActiva();
+                const ejes = obtenerEjesTransversales();
+                
+                // Obtener evaluación asignada por docente
+                const evaluacionContainer = document.querySelector('#modulo-proyeccion-general .contenedor-editable[data-placeholder*="Ejemplo"]');
+                const evaluacionAsignada = evaluacionContainer ? evaluacionContainer.textContent : 'No especificada';
+                
+                let prompt = `🔹 PROYECCIÓN GENERAL DEL MÓDULO - ${nivel} - ${ciclo} 🔹\n\n`;
+                
+                prompt += `📅 MARCO TEMPORAL:\n`;
+                prompt += `• Lecciones totales: ${lecciones} lecciones\n`;
+                prompt += `• Meses: ${document.getElementById('mesInicio').value || 'No'} a ${document.getElementById('mesFinal').value || 'No'}\n\n`;
+                
+                prompt += `🎯 CONTEXTO CURRICULAR:\n`;
+                prompt += `• Áreas seleccionadas: ${areasProyeccion.join(', ') || 'No seleccionadas'}\n`;
+                prompt += `• Eje(s) transversal(es): ${ejes}\n`;
+                prompt += `• Metodología activa: ${metodologia}\n\n`;
+                
+                // SABERES SELECCIONADOS
+                prompt += `📚 SABERES CONCEPTUALES SELECCIONADOS:\n`;
+                if (saberesProyeccionSeleccionados.size > 0) {
+                    Array.from(saberesProyeccionSeleccionados).forEach((saber, index) => {
+                        prompt += `${index + 1}. ${saber}\n`;
+                    });
+                } else {
+                    prompt += `(No se han seleccionado saberes conceptuales)\n`;
+                }
+                prompt += `\n`;
+                
+                // INDICADORES DE LOGRO (automáticos)
+                const indicadoresContainer = document.getElementById('indicadores-proyeccion-auto');
+                const indicadoresHTML = indicadoresContainer ? indicadoresContainer.innerHTML : '';
+                
+                prompt += `🎯 INDICADORES DE LOGRO SELECCIONADOS:\n`;
+                if (indicadoresHTML && !indicadoresHTML.includes('No especificado')) {
+                    // Extraer texto de los indicadores
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = indicadoresHTML;
+                    const textos = Array.from(tempDiv.querySelectorAll('div')).map(div => div.textContent.trim());
+                    
+                    textos.forEach((texto, index) => {
+                        if (texto && !texto.includes('Los indicadores aparecerán')) {
+                            prompt += `${index + 1}. ${texto.replace(/•\s*/, '')}\n`;
+                        }
+                    });
+                } else {
+                    prompt += `(No se han seleccionado indicadores de logro)\n`;
+                }
+                prompt += `\n`;
+                
+                // EVALUACIÓN ASIGNADA POR DOCENTE
+                prompt += `📊 DISTRIBUCIÓN DE EVALUACIÓN (asignada por docente):\n`;
+                if (evaluacionAsignada && evaluacionAsignada !== 'No especificada') {
+                    prompt += `${evaluacionAsignada}\n`;
+                } else {
+                    prompt += `(No se ha asignado distribución de evaluación)\n`;
+                }
+                prompt += `\n`;
+                
+                // SOLICITUD A LA IA
+                prompt += `🤖 SOLICITO UNA PROPUESTA DE PROYECCIÓN QUE:\n\n`;
+                prompt += `1. **Secuenciación temporal** para ${lecciones} lecciones\n`;
+                prompt += `2. **Actividades contextualizadas** para ${nivel} usando metodología ${metodologia}\n`;
+                prompt += `3. **Integración del eje transversal** "${ejes}"\n`;
+                prompt += `4. **Estrategias de mediación** que evidencien saberes procedimentales y actitudinales\n`;
+                prompt += `5. **Distribución sugerida** de evaluación basada en: ${evaluacionAsignada ? evaluacionAsignada.substring(0, 50) + '...' : 'no especificada'}\n\n`;
+                
+                prompt += `⚠️ **NOTA PEDAGÓGICA - EL DOCENTE DEBE CONTEXTUALIZAR:**\n`;
+                prompt += `• Estas son sugerencias que deben adaptarse a la realidad del grupo\n`;
+                prompt += `• Valide siempre con documentos oficiales del PNFT\n`;
+                prompt += `• Aplique principios del Diseño Universal para el Aprendizaje (DUA)\n`;
+                
+                document.getElementById('promptProyeccionText').value = prompt;
+                document.getElementById('promptProyeccionModal').style.display = 'block';
+                
+            } catch (error) {
+                console.error('Error al generar prompt:', error);
+                alert('Error al generar el prompt. Complete los datos básicos primero.');
+            }
         }
 
         function actualizarSemanasPreservandoContenido() {
@@ -5739,188 +6198,6 @@
 
           // ======================= FUNCIONES PARA PROYECCIÓN GENERAL =======================
 
-        // 1. FUNCIÓN PRINCIPAL: Generar el Prompt de Proyección
-        function generarPromptProyeccionGeneral() {
-            try {
-                // ===== OBTENER TODOS LOS DATOS DE LA PLANTILLA =====
-                const datos = {
-                    ciclo: document.getElementById('ciclo').value || 'No seleccionado',
-                    nivel: document.getElementById('nivel').value || 'No seleccionado',
-                    mesInicio: document.getElementById('mesInicio').value || 'No especificado',
-                    mesFinal: document.getElementById('mesFinal').value || 'No especificado',
-                    lecciones: document.getElementById('leccionesPlanificadas').value || 'No especificado',
-                    
-                    // Áreas de conocimiento (si hay sistema de selección)
-                    areas: obtenerAreasSeleccionadas(),
-                    
-                    // Ejes transversales
-                    ejes: obtenerEjesTransversales(),
-                    
-                    // Metodología activa
-                    metodologia: obtenerMetodologiaActiva(),
-                    
-                    // Saberes de la PROYECCIÓN GENERAL
-                    saberesConceptuales: document.getElementById('saberes-proyeccion-conceptuales').value || 'No especificados',
-                    saberesProcedimentales: document.getElementById('saberes-proyeccion-procedimentales').value || 'No especificados',
-                    saberesActitudinales: document.getElementById('saberes-proyeccion-actitudinales').value || 'No especificados',
-                    
-                    // Indicadores de logro de la PROYECCIÓN
-                    indicadoresLogro: document.getElementById('indicadores-proyeccion-logra').value || 'No especificados'
-                };
-                
-                // ===== CONSTRUIR EL PROMPT ESTRUCTURADO =====
-                let prompt = `🔹 PROYECCIÓN GENERAL DEL MÓDULO - ${datos.nivel} - ${datos.ciclo} 🔹\n\n`;
-                
-                // MARCO TEMPORAL
-                prompt += `📅 MARCO TEMPORAL:\n`;
-                prompt += `• Período: ${datos.mesInicio} a ${datos.mesFinal}\n`;
-                prompt += `• Lecciones totales: ${datos.lecciones}\n\n`;
-                
-                // ÁREAS Y EJES
-                prompt += `🎯 CONTEXTO CURRICULAR:\n`;
-                prompt += `• Áreas de conocimiento: ${datos.areas}\n`;
-                prompt += `• Eje(s) transversal(es): ${datos.ejes}\n`;
-                prompt += `• Metodología activa: ${datos.metodologia}\n\n`;
-                
-                // SABERES (DE LA PROYECCIÓN GENERAL)
-                prompt += `📚 SABERES PARA LA PROYECCIÓN:\n`;
-                
-                prompt += `• Conceptuales (Saber):\n`;
-                if (datos.saberesConceptuales !== 'No especificados') {
-                    const conceptuales = datos.saberesConceptuales.split('\n').filter(line => line.trim());
-                    conceptuales.forEach(line => {
-                        prompt += `   - ${line.trim()}\n`;
-                    });
-                } else {
-                    prompt += `   (No especificados)\n`;
-                }
-                
-                prompt += `\n• Procedimentales (Saber Hacer):\n`;
-                if (datos.saberesProcedimentales !== 'No especificados') {
-                    const procedimentales = datos.saberesProcedimentales.split('\n').filter(line => line.trim());
-                    procedimentales.forEach(line => {
-                        prompt += `   - ${line.trim()}\n`;
-                    });
-                } else {
-                    prompt += `   (No especificados)\n`;
-                }
-                
-                prompt += `\n• Actitudinales (Saber Ser):\n`;
-                if (datos.saberesActitudinales !== 'No especificados') {
-                    const actitudinales = datos.saberesActitudinales.split('\n').filter(line => line.trim());
-                    actitudinales.forEach(line => {
-                        prompt += `   - ${line.trim()}\n`;
-                    });
-                } else {
-                    prompt += `   (No especificados)\n`;
-                }
-                
-                prompt += `\n`;
-                
-                // INDICADORES DE LOGRO (DE LA PROYECCIÓN)
-                prompt += `🎯 INDICADORES DE LOGRO PARA LA PROYECCIÓN:\n`;
-                if (datos.indicadoresLogro !== 'No especificados') {
-                    const indicadores = datos.indicadoresLogro.split('\n').filter(line => line.trim());
-                    indicadores.forEach((line, index) => {
-                        prompt += `${index + 1}. ${line.trim()}\n`;
-                    });
-                } else {
-                    prompt += `(No especificados)\n`;
-                }
-                
-                prompt += `\n`;
-                
-                // ===== SOLICITUD ESPECÍFICA PARA PROYECCIÓN =====
-                prompt += `🤖 SOLICITO UNA PROPUESTA DE PROYECCIÓN QUE:\n\n`;
-                
-                prompt += `1. **Propuesta de secuenciación temporal:**\n`;
-                prompt += `   • Sugiera una distribución lógica, progresiva y realista de estos saberes e indicadores a lo largo de las ${datos.lecciones} lecciones del período ${datos.mesInicio} a ${datos.mesFinal}.\n`;
-                prompt += `   • Considere una progresión didáctica donde los saberes simples sean base para los complejos.\n\n`;
-                
-                prompt += `2. **Sugerencia de distribución articulada:**\n`;
-                prompt += `   • Genere una tabla o esquema que articule los saberes conceptuales con sus indicadores de logro correspondientes.\n`;
-                prompt += `   • Asigne tiempos estimados considerando la complejidad de cada saber.\n\n`;
-                
-                prompt += `3. **Actividades contextualizadas:**\n`;
-                prompt += `   • Genere ideas de actividades prácticas para el nivel ${datos.nivel}.\n`;
-                prompt += `   • Integre el/los eje(s) transversal(es) "${datos.ejes}" en las actividades.\n`;
-                prompt += `   • Utilice la metodología "${datos.metodologia}" en las propuestas.\n`;
-                prompt += `   • Incluya estrategias de mediación que integren los saberes conceptuales.\n`;
-                prompt += `   • Proponga cómo evidenciar los saberes procedimentales y fortalecer los actitudinales.\n\n`;
-                
-                prompt += `4. **Distribución de evaluación:**\n`;
-                prompt += `   • Sugiera en qué semanas asignar Trabajos Cotidianos (#1, #2, #3, #4) según el porcentaje del componente de evaluación para Formación Tecnológica del MEP.\n`;
-                prompt += `   • Ejemplo: Tarea #1 = 5%, Tarea #2 = 10%, Prueba = 25%, etc.\n\n`;
-                
-                prompt += `5. **Indicadores de evaluación:**\n`;
-                prompt += `   • Redacte un indicador de evaluación específico y medible por cada indicador de logro listado arriba.\n\n`;
-                
-                // ===== NOTA FINAL IMPORTANTE =====
-                prompt += `⚠️ **NOTA PEDAGÓGICA CRUCIAL - EL DOCENTE DEBE LEER Y ANALIZAR:**\n`;
-                prompt += `• Las sugerencias generadas por la IA son un **punto de partida** y una **propuesta de ruta**.\n`;
-                prompt += `• **NUNCA reemplazarán el criterio y experiencia profesional del docente**.\n`;
-                prompt += `• Deben ser **leídas, analizadas, adaptadas y distribuidas** según:\n`;
-                prompt += `  - El contexto específico del grupo.\n`;
-                prompt += `  - El tiempo real disponible.\n`;
-                prompt += `  - Las necesidades particulares de los estudiantes.\n`;
-                prompt += `  - Los recursos disponibles en el Centro Educativo.\n\n`;
-                
-                prompt += `📝 **Esta proyección es una guía, no un mandato. Usted, como docente experto, tiene la última palabra.**`;
-                
-                // ===== MOSTRAR EL PROMPT EN EL MODAL =====
-                document.getElementById('promptProyeccionText').value = prompt;
-                document.getElementById('promptProyeccionModal').style.display = 'block';
-                
-                // Sincronizar lecciones automáticamente
-                sincronizarLeccionesProyeccion();
-                
-            } catch (error) {
-                console.error('Error al generar prompt de proyección:', error);
-                alert('Error al generar el prompt. Por favor, complete los datos básicos primero.');
-            }
-        }
-        
-        // 2. FUNCIÓN PARA SINCRONIZAR LECCIONES AUTOMÁTICAMENTE
-        function sincronizarLeccionesProyeccion() {
-            const leccionesTotales = document.getElementById('leccionesPlanificadas').value;
-            if (leccionesTotales) {
-                document.getElementById('proyeccion-lecciones-totales').value = leccionesTotales;
-            }
-        }
-        
-        // 3. FUNCIONES AUXILIARES (ya existen en tu código, las reutilizamos)
-        function obtenerEjesTransversales() {
-            const ejesSeleccionados = Array.from(document.querySelectorAll('input[name="eje"]:checked')).map(cb => cb.value);
-            const ejesMap = {
-                'ciudadania': 'Ciudadanía y ética digital',
-                'pensamiento': 'Pensamiento computacional',
-                'emprendimiento': 'Emprendimiento e Innovación'
-            };
-            
-            return ejesSeleccionados.map(eje => ejesMap[eje] || eje).join(', ') || 'No seleccionado';
-        }
-        
-        function obtenerMetodologiaActiva() {
-            let metodo = document.getElementById('metodologiaActiva').value;
-            if (metodo === 'otra') {
-                metodo = document.getElementById('metodologiaPersonalizada').value || 'Otra metodología';
-            }
-            
-            const metodologiasMap = {
-                'ABJ': 'Aprendizaje basado en juegos (ABJ)',
-                'ABR': 'Aprendizaje basado en retos (ABR)',
-                'APD': 'Aprendizaje Pensamiento por Diseño (APD)'
-            };
-            
-            return metodo ? (metodologiasMap[metodo] || metodo) : 'Pendiente';
-        }
-        
-        function obtenerAreasSeleccionadas() {
-            // Esta función necesitaría adaptarse si tienes un sistema de selección de áreas
-            // Por ahora retorna un placeholder
-            return 'Áreas según selección del docente';
-        }
-        
         // 4. FUNCIONES PARA EL MODAL
         function cerrarPromptProyeccionModal() {
             document.getElementById('promptProyeccionModal').style.display = 'none';
@@ -5966,3 +6243,4 @@
     </script>
 </body>
 </html>
+
