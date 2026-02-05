@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -2662,19 +2662,10 @@
         }
 
         function actualizarNiveles() {
-            console.log("🔧 actualizarNiveles() EJECUTADA");
-            console.log("Ciclo seleccionado:", document.getElementById('ciclo').value);
-         
             const ciclo = document.getElementById('ciclo').value;
             const nivelSelect = document.getElementById('nivel');
-         
-           console.log("Elemento nivelSelect encontrado:", !!nivelSelect);
-         
+            
             nivelSelect.innerHTML = '<option value="">Seleccione nivel</option>';
-
-            if (!ciclo) {
-                return; // Si no hay ciclo seleccionado, salir
-            }
             
             if (ciclo === 'Materno Infantil/Transición') {
                 nivelSelect.innerHTML += '<option value="Grupo Interactivo II y Transición">Grupo Interactivo II y Transición</option>';
@@ -2691,10 +2682,6 @@
                 nivelSelect.innerHTML += '<option value="8°">8°</option>';
                 nivelSelect.innerHTML += '<option value="9°">9°</option>';
             }
-
-            setTimeout(() => {
-                nivelSelect.dispatchEvent(new Event('change'));
-            }, 100);
         }
 
         function inicializarSemanas() {
@@ -2859,21 +2846,11 @@
                 saberesProyeccionSeleccionados.delete(nombreSaber);
             }
             
-            // Actualizar la clase de selección visual - VERSIÓN MEJORADA
-            const saberItems = document.querySelectorAll('#saberes-conceptuales-proyeccion-detalle .saber-conceptual-item');
-            saberItems.forEach(item => {
-                const nombreElement = item.querySelector('div > div:first-child');
-                if (nombreElement) {
-                    const texto = nombreElement.textContent.trim();
-                    const nombreLimpio = texto.replace(/\s*M[12]$/, '').trim();
-                    
-                    if (nombreLimpio === nombreSaber) {
-                        item.classList.toggle('seleccionado', seleccionado);
-                        const checkbox = item.querySelector('input[type="checkbox"]');
-                        if (checkbox) {
-                            checkbox.checked = seleccionado;
-                        }
-                    }
+            // Actualizar la clase de selección visual
+            const checkboxes = document.querySelectorAll('#saberes-conceptuales-proyeccion-detalle input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                if (checkbox.nextElementSibling?.querySelector('div')?.textContent.includes(nombreSaber)) {
+                    checkbox.parentElement.classList.toggle('seleccionado', seleccionado);
                 }
             });
             
@@ -2882,46 +2859,6 @@
             
             // Actualizar indicadores automáticos
             actualizarIndicadoresProyeccion();
-        }
-
-         // 4.1 RESTAURAR SABERES DE PROYECCIÓN AL CARGAR ARCHIVO
-        function restaurarSaberesProyeccion() {
-            if (saberesProyeccionSeleccionados.size === 0) {
-                console.log('No hay saberes para restaurar');
-                return;
-            }
-            
-            console.log('Restaurando saberes de proyección:', Array.from(saberesProyeccionSeleccionados));
-            
-            // Esperar un poco más para asegurar que los elementos están renderizados
-            setTimeout(() => {
-                const saberItems = document.querySelectorAll('#saberes-conceptuales-proyeccion-detalle .saber-conceptual-item');
-                let encontrados = 0;
-                
-                saberItems.forEach(item => {
-                    const nombreElement = item.querySelector('div > div:first-child');
-                    if (nombreElement) {
-                        const texto = nombreElement.textContent.trim();
-                        const nombreLimpio = texto.replace(/\s*M[12]$/, '').trim();
-                        
-                        if (saberesProyeccionSeleccionados.has(nombreLimpio)) {
-                            const checkbox = item.querySelector('input[type="checkbox"]');
-                            if (checkbox) {
-                                checkbox.checked = true;
-                                item.classList.add('seleccionado');
-                                encontrados++;
-                            }
-                        }
-                    }
-                });
-                
-                console.log(`Saberes restaurados: ${encontrados} de ${saberesProyeccionSeleccionados.size}`);
-                
-                // Actualizar el contenedor visual
-                actualizarContenedorSaberesConceptualesProyeccion();
-                actualizarIndicadoresProyeccion();
-                
-            }, 800); // Dar más tiempo para renderizar
         }
         
         // 5. ACTUALIZAR CONTENEDOR DE SABERES CONCEPTUALES (COLUMNA 1)
@@ -4055,24 +3992,6 @@
             if (metodologia === 'otra') {
                 metodologia = document.getElementById('metodologiaPersonalizada').value || 'Otra metodología (personalizada)';
             }
-
-            // ===== OBTENER DATOS DE PROYECCIÓN =====
-            const metodologiaProyeccion = document.getElementById('metodologia-proyeccion').value;
-
-            // Obtener áreas seleccionadas en proyección
-           const areasProyeccionGuardar = [];
-           document.querySelectorAll('input[name="area-proyeccion"]:checked').forEach(checkbox => {
-               const areaMapping = {
-                   'apropiacion': 'Apropiación tecnológica y Digital',
-                   'programacion': 'Programación y Algoritmos',
-                   'robotica': 'Computación física y Robótica',
-                   'ciencia': 'Ciencia de datos e Inteligencia artificial'
-               };
-               areasProyeccionGuardar.push(areaMapping[checkbox.value]);
-           });
-           
-           // Obtener evaluación de proyección
-           const evaluacionProyeccion = document.querySelector('#modulo-proyeccion-general .contenedor-editable[data-placeholder*="Ejemplo"]')?.innerHTML || '';
             
             return {
                 informacionGeneral: {
@@ -4092,16 +4011,6 @@
                 },
                 ejesTransversales: Array.from(document.querySelectorAll('input[name="eje"]:checked')).map(cb => cb.value),
                 metodologiaActiva: metodologia,
-
-                / ===== DATOS DE PROYECCIÓN GENERAL =====
-                proyeccionGeneral: {
-                    metodologiaProyeccion: metodologiaProyeccion,
-                    areasProyeccion: areasProyeccionGuardar,
-                    saberesProyeccionSeleccionados: Array.from(saberesProyeccionSeleccionados),
-                    evaluacionProyeccion: evaluacionProyeccion,
-                    // Guardar también el texto del campo de evaluación
-                    textoEvaluacionProyeccion: document.querySelector('#modulo-proyeccion-general .contenedor-editable[data-placeholder*="Ejemplo"]')?.textContent || ''
-                },
                 semanas: semanas,
                 reflexiones: {
                     queFunciono: document.getElementById('queFunciono').value,
@@ -4117,85 +4026,85 @@
         }
 
         function cargarPlan(plan) {
-           if (plan.informacionGeneral) {
-               document.getElementById('cursoLectivo').value = plan.informacionGeneral.cursoLectivo || '2026';
-               document.getElementById('semestre').value = plan.informacionGeneral.semestre || 'I';
-               document.getElementById('direccionRegional').value = plan.informacionGeneral.direccionRegional || '';
-               document.getElementById('centroEducativo').value = plan.informacionGeneral.centroEducativo || '';
-               document.getElementById('codigoCentro').value = plan.informacionGeneral.codigoCentro || '';
-               document.getElementById('nombreDocente').value = plan.informacionGeneral.nombreDocente || '';
-               document.getElementById('circuito').value = plan.informacionGeneral.circuito || '';
-               document.getElementById('ciclo').value = plan.informacionGeneral.ciclo || '';
-               
-               actualizarNiveles();
-               
-               document.getElementById('nivel').value = plan.informacionGeneral.nivel || '';
-               document.getElementById('leccionesPlanificadas').value = plan.informacionGeneral.leccionesPlanificadas || '8';
-               document.getElementById('mesInicio').value = plan.informacionGeneral.mesInicio || '';
-               document.getElementById('mesFinal').value = plan.informacionGeneral.mesFinal || '';
-               document.getElementById('asignatura').value = plan.informacionGeneral.asignatura || 'Formación tecnológica/Informática Educativa';
-           }
-           
-           if (plan.ejesTransversales) {
-               document.querySelectorAll('input[name="eje"]').forEach(checkbox => {
-                   checkbox.checked = plan.ejesTransversales.includes(checkbox.value);
-               });
-           }
-           
-           if (plan.metodologiaActiva) {
-               const metodologia = plan.metodologiaActiva;
-               if (metodologia.includes('ABJ') || metodologia.includes('Aprendizaje basado en juegos')) {
-                   document.getElementById('metodologiaActiva').value = 'ABJ';
-               } else if (metodologia.includes('ABR') || metodologia.includes('Aprendizaje basado en retos')) {
-                   document.getElementById('metodologiaActiva').value = 'ABR';
-               } else if (metodologia.includes('APD') || metodologia.includes('Pensamiento por Diseño')) {
-                   document.getElementById('metodologiaActiva').value = 'APD';
-               } else if (metodologia) {
-                   document.getElementById('metodologiaActiva').value = 'otra';
-                   document.getElementById('metodologiaPersonalizada').value = metodologia;
-                   document.getElementById('metodologiaPersonalizadaContainer').classList.add('visible');
-               }
-           }
-           
-           if (plan.semanas && plan.semanas.length > 0) {
-               semanas = plan.semanas;
-               reconstruirVistaSemanasPreservandoContenido();
-           }
-           
-           if (plan.saberesGlobales) {
-               saberesSeleccionados = new Set(plan.saberesGlobales);
-           }
-           
-           if (plan.saberesProcedimentalesGlobales) {
-               saberesProcedimentalesGlobales = new Set(plan.saberesProcedimentalesGlobales);
-           }
-           
-           if (plan.saberesActitudinalesGlobales) {
-               saberesActitudinalesGlobales = new Set(plan.saberesActitudinalesGlobales);
-           }
-           
-           if (plan.reflexiones) {
-               document.getElementById('queFunciono').value = plan.reflexiones.queFunciono || '';
-               document.getElementById('queNoFunciono').value = plan.reflexiones.queNoFunciono || '';
-               document.getElementById('queMejorar').value = plan.reflexiones.queMejorar || '';
-           }
-           
-           if (plan.observaciones) {
-               document.getElementById('observaciones').value = plan.observaciones || '';
-           }
+            if (plan.informacionGeneral) {
+                document.getElementById('cursoLectivo').value = plan.informacionGeneral.cursoLectivo || '2026';
+                document.getElementById('semestre').value = plan.informacionGeneral.semestre || 'I';
+                document.getElementById('direccionRegional').value = plan.informacionGeneral.direccionRegional || '';
+                document.getElementById('centroEducativo').value = plan.informacionGeneral.centroEducativo || '';
+                document.getElementById('codigoCentro').value = plan.informacionGeneral.codigoCentro || '';
+                document.getElementById('nombreDocente').value = plan.informacionGeneral.nombreDocente || '';
+                document.getElementById('circuito').value = plan.informacionGeneral.circuito || '';
+                document.getElementById('ciclo').value = plan.informacionGeneral.ciclo || '';
+                
+                actualizarNiveles();
+                
+                document.getElementById('nivel').value = plan.informacionGeneral.nivel || '';
+                document.getElementById('leccionesPlanificadas').value = plan.informacionGeneral.leccionesPlanificadas || '8';
+                document.getElementById('mesInicio').value = plan.informacionGeneral.mesInicio || '';
+                document.getElementById('mesFinal').value = plan.informacionGeneral.mesFinal || '';
+                document.getElementById('asignatura').value = plan.informacionGeneral.asignatura || 'Formación tecnológica/Informática Educativa';
+            }
+            
+            if (plan.ejesTransversales) {
+                document.querySelectorAll('input[name="eje"]').forEach(checkbox => {
+                    checkbox.checked = plan.ejesTransversales.includes(checkbox.value);
+                });
+            }
+            
+            if (plan.metodologiaActiva) {
+                // Manejar metodología personalizada
+                const metodologia = plan.metodologiaActiva;
+                if (metodologia.includes('ABJ') || metodologia.includes('Aprendizaje basado en juegos')) {
+                    document.getElementById('metodologiaActiva').value = 'ABJ';
+                } else if (metodologia.includes('ABR') || metodologia.includes('Aprendizaje basado en retos')) {
+                    document.getElementById('metodologiaActiva').value = 'ABR';
+                } else if (metodologia.includes('APD') || metodologia.includes('Pensamiento por Diseño')) {
+                    document.getElementById('metodologiaActiva').value = 'APD';
+                } else if (metodologia) {
+                    document.getElementById('metodologiaActiva').value = 'otra';
+                    document.getElementById('metodologiaPersonalizada').value = metodologia;
+                    document.getElementById('metodologiaPersonalizadaContainer').classList.add('visible');
+                }
+            }
+            
+            if (plan.semanas && plan.semanas.length > 0) {
+                semanas = plan.semanas;
+                reconstruirVistaSemanasPreservandoContenido();
+            }
+            
+            if (plan.saberesGlobales) {
+                saberesSeleccionados = new Set(plan.saberesGlobales);
+            }
+            
+            if (plan.saberesProcedimentalesGlobales) {
+                saberesProcedimentalesGlobales = new Set(plan.saberesProcedimentalesGlobales);
+            }
+            
+            if (plan.saberesActitudinalesGlobales) {
+                saberesActitudinalesGlobales = new Set(plan.saberesActitudinalesGlobales);
+            }
+            
+            if (plan.reflexiones) {
+                document.getElementById('queFunciono').value = plan.reflexiones.queFunciono || '';
+                document.getElementById('queNoFunciono').value = plan.reflexiones.queNoFunciono || '';
+                document.getElementById('queMejorar').value = plan.reflexiones.queMejorar || '';
+            }
+            
+            if (plan.observaciones) {
+                document.getElementById('observaciones').value = plan.observaciones || '';
+            }
             
             actualizarContadoresSemanas();
-
-           // FORZAR ACTUALIZACIÓN DE SABERES CONCEPTUALES
-           setTimeout(() => {
-                  // Actualizar semanas
-                   semanas.forEach((semana, index) => {
-                       actualizarRdASemana(index + 1);
-                       actualizarOpcionesSaberesSemana(index + 1);
-                       actualizarIndicadoresSemana(index + 1);
-                       actualizarSaberesConceptualesContenedor(index + 1);
-                   });
-               }, 500);
+            
+            // FORZAR ACTUALIZACIÓN DE SABERES CONCEPTUALES
+            setTimeout(() => {
+                semanas.forEach((semana, index) => {
+                    actualizarRdASemana(index + 1);
+                    actualizarOpcionesSaberesSemana(index + 1);
+                    actualizarIndicadoresSemana(index + 1);
+                    actualizarSaberesConceptualesContenedor(index + 1);
+                });
+            }, 500);
             
             alert('Plan cargado exitosamente');
         }
@@ -6334,8 +6243,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
