@@ -2662,10 +2662,19 @@
         }
 
         function actualizarNiveles() {
+            console.log("🔧 actualizarNiveles() EJECUTADA");
+            console.log("Ciclo seleccionado:", document.getElementById('ciclo').value);
+         
             const ciclo = document.getElementById('ciclo').value;
             const nivelSelect = document.getElementById('nivel');
-            
+         
+           console.log("Elemento nivelSelect encontrado:", !!nivelSelect);
+         
             nivelSelect.innerHTML = '<option value="">Seleccione nivel</option>';
+
+            if (!ciclo) {
+                return; // Si no hay ciclo seleccionado, salir
+            }
             
             if (ciclo === 'Materno Infantil/Transición') {
                 nivelSelect.innerHTML += '<option value="Grupo Interactivo II y Transición">Grupo Interactivo II y Transición</option>';
@@ -2682,6 +2691,10 @@
                 nivelSelect.innerHTML += '<option value="8°">8°</option>';
                 nivelSelect.innerHTML += '<option value="9°">9°</option>';
             }
+
+            setTimeout(() => {
+                nivelSelect.dispatchEvent(new Event('change'));
+            }, 100);
         }
 
         function inicializarSemanas() {
@@ -6384,6 +6397,7 @@
     </script>
 </body>
 </html>
+
 
 
 
