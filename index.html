@@ -1304,24 +1304,24 @@
                 <div style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 12px; margin-bottom: 15px; border-radius: 4px;">
                     <strong style="color: #856404;">📋 CONTEXTO OFICIAL Y ADVERTENCIAS PEDAGÓGICAS - LEA ANTES DE USAR:</strong><br><br>
                     
-                    <strong>ESTE PROMPT SE GENERA DESDE LA PLANTILLA OFICIAL DEL PNFT.</strong><br>
+                    <strong>ESTE PROMPT SE GENERA DESDE LA INFORMACIÓN OFICIAL DE LOS MÓDULOS DEL PNFT.</strong><br>
                     Todos los elementos curriculares han sido seleccionados <strong>EXCLUSIVAMENTE del Macro y Micro currículo oficial del PNFT</strong>.<br><br>
                     
                     <strong>⚠️ ADVERTENCIA PEDAGÓGICA:</strong><br>
                     1. Este prompt es un <strong>asistente para la operacionalización técnica</strong> de contenidos oficiales.<br>
                     2. <strong>NO</strong> conoce la realidad específica de su Centro Educativo ni el diagnóstico de su grupo.<br>
-                    3. <strong>USTED, DOCENTE, DEBE:</strong><br>
+                    3. <strong> Por lo que se le sugiere:</strong><br>
                        • Contextualizar todas las sugerencias a su realidad.<br>
                        • Aplicar los principios del <strong>Diseño Universal para el Aprendizaje (DUA)</strong>.<br>
+                       • Realizar la lectura de las <strong>orientaciones generales y guía del docente del PNFT </strong>.<br> 
                        • Validar con los documentos oficiales del PNFT.<br><br>
                     
                     <strong>🤖 CONFIGURACIÓN NECESARIA PARA LA IA:</strong><br>
-                    Para que las sugerencias sean válidas, el agente de IA <strong>DEBE tener precargado</strong> el marco oficial del MEP-Costa Rica:<br>
+                    Para que las sugerencias sean válidas, el agente de IA <strong>DEBE tener precargado</strong> la siguiente información si lo que desea es obtener información directa de:<br>
                     • Macro y Micro currículo del PNFT<br>
                     • Orientaciones Generales y Guías Docentes<br>
                     • Componente de evaluación para Formación Tecnológica<br>
-                    <em>(Idealmente, cargue estos documentos en la IA antes de usar este prompt).</em>
-                </div>
+                    <em>(Idealmente, cargue estos documentos en la IA antes de usar este prompt o bien continue utilizandolo y siéntase en la libertad de crear su propio prompt, ya que esto es sólo un ejemplo el cual lo puede sobrescribir.
                 
                 <div style="margin: 12px 0;">
                     <label style="font-weight: 600;">Prompt generado automáticamente:</label>
@@ -3041,12 +3041,12 @@
                 
                 // SOLICITUD A LA IA
                 prompt += `🤖 SOLICITO UNA PROPUESTA DE PROYECCIÓN QUE:\n\n`;
-                prompt += `1. *Proyección articulada* Distribuye de manera articulada las ${lecciones} lecciones del Módulo seleccionado - del nivel ${nivel} - y ciclo ${ciclo} entre los meses ${document.getElementById('mesInicio').value || 'No'} a ${document.getElementById('mesFinal').value || 'No'} anotados por el docente , en una tabla que incluya: semana, fecha aproximada, lección, saber conceptual, actividad segun metodología ${metodologia} y el indicador de logro correspondiente \n\n`;
-                prompt += `1. *Secuenciación temporal* para ${lecciones} lecciones\n`;
-                prompt += `2. **Actividades contextualizadas** para ${nivel} usando metodología ${metodologia}\n`;
-                prompt += `3. **Integración del eje transversal** "${ejes}"\n`;
-                prompt += `4. **Estrategias de mediación** que evidencien saberes procedimentales y actitudinales\n`;
-                prompt += `5. **Distribución sugerida** de evaluación basada en: ${evaluacionAsignada ? evaluacionAsignada.substring(0, 50) + '...' : 'no especificada'}\n\n`;
+                prompt += `1.  Distribuye de manera articulada las ${lecciones} lecciones del Módulo seleccionado - del nivel ${nivel} - y ciclo ${ciclo} entre los meses ${document.getElementById('mesInicio').value || 'No'} a ${document.getElementById('mesFinal').value || 'No'} anotados por el docente , en una tabla que incluya: semana, fecha aproximada, lección, saber conceptual, actividad segun metodología ${metodologia} y el indicador de logro correspondiente \n\n`;
+                prompt += `1.  Secuenciación temporal para ${lecciones} lecciones\n`;
+                prompt += `2.  Actividades contextualizadas para ${nivel} usando metodología ${metodologia}\n`;
+                prompt += `3.  Integración del eje transversal "${ejes}"\n`;
+                prompt += `4.  Estrategias de mediación que evidencien saberes procedimentales y actitudinales\n`;
+                prompt += `5.  Distribución sugerida de evaluación basada en: ${evaluacionAsignada ? evaluacionAsignada.substring(0, 50) + '...' : 'no especificada'}\n\n`;
                 
                 prompt += `⚠️ **NOTA PEDAGÓGICA - EL DOCENTE DEBE CONTEXTUALIZAR:**\n`;
                 prompt += `• Estas son sugerencias que deben adaptarse a la realidad del grupo\n`;
@@ -6473,6 +6473,7 @@ function restaurarSaberesProyeccion() {
     </script>
 </body>
 </html>
+
 
 
 
