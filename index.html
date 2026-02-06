@@ -3041,7 +3041,8 @@
                 
                 // SOLICITUD A LA IA
                 prompt += `🤖 SOLICITO UNA PROPUESTA DE PROYECCIÓN QUE:\n\n`;
-                prompt += `1. **Secuenciación temporal** para ${lecciones} lecciones\n`;
+                prompt += `1. *Proyección articulada* Distribuye de manera articulada las ${lecciones} lecciones del Módulo seleccionado - del nivel ${nivel} - y ciclo ${ciclo} entre los meses ${document.getElementById('mesInicio').value || 'No'} a ${document.getElementById('mesFinal').value || 'No'} anotados por el docente , en una tabla que incluya: semana, fecha aproximada, lección, saber conceptual, actividad segun metodología ${metodologia} y el indicador de logro correspondiente \n\n`;
+                prompt += `1. *Secuenciación temporal* para ${lecciones} lecciones\n`;
                 prompt += `2. **Actividades contextualizadas** para ${nivel} usando metodología ${metodologia}\n`;
                 prompt += `3. **Integración del eje transversal** "${ejes}"\n`;
                 prompt += `4. **Estrategias de mediación** que evidencien saberes procedimentales y actitudinales\n`;
@@ -6472,5 +6473,6 @@ function restaurarSaberesProyeccion() {
     </script>
 </body>
 </html>
+
 
 
