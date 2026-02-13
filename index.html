@@ -6307,13 +6307,13 @@
             prompt += `\n`;
             
             // SOLICITUD
-            prompt += `🤖 Sugerencia: Para mejores resultados entre más específico y detallado sea cada campo, mejor será la calidad del prompt generado. Puedes editar el prompt antes de compartirlo con tu herramienta de IA favorita.\n`;
-            prompt += `• Define la acción principal que deseas que se realice ¿Qué acción debe realizar la IA? Ej: Crear una actividad interactiva, Diseñar una rúbrica:'Pendiente'}\n`;
-            prompt += `• Describe el entorno educativo y temático, ¿En qué área de conocimiento o situación? Ej: Programación y Algoritmos, tema de variables... : 'Pendiente'}\n`;
-            prompt += `• Especifica el público objetivo y sus características : 'Pendiente'}.\n`;
-            prompt += `• Añade requisitos específicos, formato y restricciones por ejemplo,¿Qué especificaciones adicionales? Ej: Trabajo colaborativo, recursos digitales, 40 minutos de duración, incluir evaluación formativa...: 'Pendiente'} \n`;
-            prompt += `• Define el objetivo pedagógico que se busca lograr, ¿Cuál es el objetivo de aprendizaje? Ej: Desarrollar pensamiento crítico, fortalecer comprensión lectora...: 'Pendiente'} \n`;
-            prompt += `• Genera una actividad secuenciada para la ${semana.lecciones} que considere:\n`;
+            prompt += `🤖 Sugerencia: Para mejores resultados entre más específico y detallado sea cada campo, mejor será la calidad del prompt generado. Puedes editar el prompt antes de compartirlo con tu herramienta de IA favorita.\n\n`;
+            prompt += `• Define la acción principal que deseas que se realice ¿Qué acción debe realizar la IA? Ej: Crear una actividad interactiva, Diseñar una rúbrica: \n`;
+            prompt += `• Describe el entorno educativo y temático, ¿En qué área de conocimiento o situación? Ej: Programación y Algoritmos, tema de variables.:  \n`;
+            prompt += `• Especifica el público objetivo y sus características :  \n`;
+            prompt += `• Añade requisitos específicos, formato y restricciones por ejemplo ¿Qué especificaciones adicionales? Ej: Trabajo colaborativo, recursos digitales, 40 minutos de duración, incluir evaluación formativa o sumativa:  \n`;
+            prompt += `• Define el objetivo pedagógico que se busca lograr, ¿Cuál es el objetivo de aprendizaje? Ej: Desarrollar pensamiento crítico, fortalecer comprensión lectora:   \n`;
+            prompt += `• Genera una actividad secuenciada para la ${semana.lecciones} que considere: \n`;
             prompt += `• Integren el eje transversal "${ejesSeleccionados.length > 0 ? ejesSeleccionados[0] : 'Pendiente'}" en las actividades.\n`;
             prompt += `• ${metodologiaSeleccionada !== 'Pendiente' ? `Incluye la metodología activa y la fase que el docente desee integrar` : 'Escribir Pendiente metodología en caso de que no haya anota ninguna'}.\n`;
             prompt += `• Estrategias de mediación que integren los saberes conceptuales.\n`;
@@ -6482,6 +6482,7 @@ function restaurarSaberesProyeccion() {
     </script>
 </body>
 </html>
+
 
 
 
